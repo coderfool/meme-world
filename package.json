@@ -1,0 +1,14 @@
+{
+  "name": "meme-world",
+  "version": "1.0.0",
+  "description": "An app to share memes",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "author": "coderfool",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

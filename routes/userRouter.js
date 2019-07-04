@@ -44,7 +44,7 @@ router.post('/signup', (req, res, next) => {
     .catch((err) => next(err));
 }); 
 
-router.post('/login', passport.authenticate('local'), (req, res) => {
+router.post('/login', passport.authenticate('local', {session: false}), (req, res) => {
     const token = authenticate.getToken({_id: req.user._id});
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
@@ -56,7 +56,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 router.get('/logout', (req, res, next) => {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
-
+    
     if (!token) {
         const err = new Error('You are not logged in');
         err.status = 403;
@@ -64,9 +64,7 @@ router.get('/logout', (req, res, next) => {
     }
     else {
         authenticate.verifyToken(token);
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json({success: true});
+        res.redirect('/');
     }
 });
 

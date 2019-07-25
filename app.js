@@ -6,6 +6,8 @@ const userRouter = require('./routes/userRouter');
 
 const app = express();
 
+global.appRoot = __dirname;
+
 const port = process.env.PORT || 3000;
 
 mongoose.connect(config.mongoUrl)

@@ -28,7 +28,7 @@ passport.use(new JwtStrategy(opts, (payload, done) => {
 }));
 
 module.exports.getToken = (user) => {
-    return jwt.sign(user, config.secretKey, {expiresIn: '7d'});
+    return jwt.sign(user, config.secretKey, {expiresIn: '1d'});
 };
 
 module.exports.verifyToken = (token) => {

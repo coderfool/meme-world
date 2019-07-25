@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-const User = require('../models/user');
+const Users = require('../models/user');
 const authenticate = require('../authenticate');
 const router = express.Router();
 
@@ -26,8 +26,8 @@ const upload = multer({
 });
 
 router.post('/signup', upload.single('image'), (req, res, next) => {
-    User.findOne({email: req.body.email})
-    .then((user) => {
+    Users.findOne({email: req.body.email})
+    .then(user => {
         if (user) {
             const error = new Error('A user with the given email ID is already registered');
             error.status = 403;
@@ -44,22 +44,20 @@ router.post('/signup', upload.single('image'), (req, res, next) => {
             else {
                 user.image = fs.readFileSync(path.join(appRoot, 'public/assets/images/user-default.png'));
             }
-            User.register(new User(user), req.body.password)
-            .then((user) => {
+            Users.register(new Users(user), req.body.password)
+            .then(user => {
                 user.save()
-                .then((user) => {
+                .then(user => {
                     passport.authenticate('local')(req, res, () => {
-                        res.statusCode = 200;
-                        res.setHeader('Content-Type', 'application/json');
-                        res.json({success: true});
+                        res.status(200).end();
                     });
                 })
-                .catch((err) => next(err));
+                .catch(err => next(err));
             })
-            .catch((err) => next(err));
+            .catch(err => next(err));
         }
     })
-    .catch((err) => next(err));
+    .catch(err => next(err));
 }); 
 
 router.post('/login', passport.authenticate('local', {session: false}), (req, res) => {
@@ -74,6 +72,26 @@ router.post('/login', passport.authenticate('local', {session: false}), (req, re
 
 router.get('/logout', authenticate.isLoggedIn, (req, res, next) => {
     res.redirect('/');
+});
+
+router.delete('/:username', authenticate.isLoggedIn, (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader.split(' ')[1];
+    const payload = authenticate.getPayload(token);
+    Users.findById(payload._id)
+    .then(user => {
+        if (user.username !== req.params.username) {
+            const err = new Error('Unauthorized');
+            err.status = 401;
+            return next(err);
+        }
+        Users.findByIdAndDelete(payload._id)
+        .then(user => {
+            res.status(200).end();
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
 });
 
 module.exports = router;

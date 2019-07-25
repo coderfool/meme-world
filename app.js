@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const path = require('path');
 const config = require('./config');
 const userRouter = require('./routes/userRouter');
 
@@ -17,6 +18,8 @@ mongoose.connect(config.mongoUrl)
 })
 
 .catch(err => next(err));
+
+app.use(express.static(path.join(appRoot, 'public')));
 
 app.get('/', (req, res) => {
     res.send('Meme World');

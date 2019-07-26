@@ -12,7 +12,11 @@ global.appRoot = __dirname;
 
 const port = process.env.PORT || 3000;
 
-mongoose.connect(config.mongoUrl)
+mongoose.connect(config.mongoUrl, {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+})
 
 .then((db) => {
     console.log('Connected to MongoDB server');

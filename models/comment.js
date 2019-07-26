@@ -14,6 +14,9 @@ const commentSchema = new Schema({
         type: String,
         required: true
     },
+    image: {
+        type: Buffer
+    },
     upvotes: {
         type: Number,
         default: 0

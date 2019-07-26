@@ -26,6 +26,21 @@ const upload = multer({
     }
 });
 
+router.get('/:userId', (req, res, next) => {
+    Users.findById(req.params.userId)
+    .then(user => {
+        if (!user) {
+            const err = new Error('User not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(user);
+    })
+    .catch(err => next(err));
+});
+
 router.post('/signup', upload.single('image'), (req, res, next) => {
     Users.findOne({email: req.body.email})
     .then(user => {

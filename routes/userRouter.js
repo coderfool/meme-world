@@ -14,6 +14,7 @@ const storage = multer.memoryStorage();
 
 const upload = multer({
     storage: storage,
+    limits: {fileSize: 15 * 1024 * 1024},
     fileFilter: (req, file, cb) => {
         const regex = /\.(jpg|jpeg|png|gif)$/i;
         if (regex.test(file.originalname)) {
@@ -74,22 +75,18 @@ router.get('/logout', authenticate.isLoggedIn, (req, res, next) => {
     res.redirect('/');
 });
 
-router.delete('/:username', authenticate.isLoggedIn, (req, res, next) => {
+router.delete('/:userId', authenticate.isLoggedIn, (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader.split(' ')[1];
     const payload = authenticate.getPayload(token);
-    Users.findById(payload._id)
-    .then(user => {
-        if (user.username !== req.params.username) {
-            const err = new Error('Unauthorized');
-            err.status = 401;
-            return next(err);
-        }
-        Users.findByIdAndDelete(payload._id)
-        .then(user => {
-            res.status(200).end();
-        })
-        .catch(err => next(err));
+    if (payload._id !== req.params.userId) {
+        const err = new Error('Forbidden');
+        err.status = 403;
+        return next(err);
+    }
+    Users.findByIdAndDelete(payload._id)
+    .then(resp => {
+        res.status(200).end();
     })
     .catch(err => next(err));
 });

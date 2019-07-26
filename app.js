@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const config = require('./config');
 const userRouter = require('./routes/userRouter');
+const postRouter = require('./routes/postRouter');
 
 const app = express();
 
@@ -17,16 +18,13 @@ mongoose.connect(config.mongoUrl)
     console.log('Connected to MongoDB server');
 })
 
-.catch(err => next(err));
+.catch(err => console.log(err));
 
 app.use(express.static(path.join(appRoot, 'public')));
 
-app.get('/', (req, res) => {
-    res.send('Meme World');
-});
-
 app.use(passport.initialize());
 app.use('/users', userRouter);
+app.use('/posts', postRouter);
 
 // redirect to home if route doesn't exist
 app.use((req, res, next) => {

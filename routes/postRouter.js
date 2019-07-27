@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-const Users = require('../models/user');
 const Posts = require('../models/post');
 const Comments = require('../models/comment');
 const authenticate = require('../authenticate');
@@ -37,13 +36,10 @@ router.route('/')
 })
 
 .post(authenticate.isLoggedIn, upload.single('image'), (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader.split(' ')[1];
-    const payload = authenticate.getPayload(token);
     Posts.create({
         title: req.body.title,
         image: req.file.buffer,
-        author: payload._id
+        author: String(req.user._id)
     })
     .then(post => {
         res.redirect(`/posts/${post._id}`);
@@ -67,10 +63,7 @@ router.route('/:postId')
     .catch(err => next(err)); 
 })
 
-.put((req, res, next) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader.split(' ')[1];
-    const payload = authenticate.getPayload(token);
+.put(authenticate.isLoggedIn, (req, res, next) => {
     Posts.findById(req.params.postId)
     .then(post => {
         if (!post) {
@@ -78,7 +71,7 @@ router.route('/:postId')
             err.status = 404;
             return next(err);
         }
-        if (payload._id !== post.author) {
+        if (String(req.user._id) !== post.author) {
             const err = new Error('Forbidden');
             err.status = 403;
             return next(err);
@@ -96,13 +89,10 @@ router.route('/:postId')
     .catch(err => next(err))
 })
 
-.delete((req, res, next) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader.split(' ')[1];
-    const payload = authenticate.getPayload(token);
+.delete(authenticate.isLoggedIn, (req, res, next) => {
     Posts.findById(req.params.postId)
     .then(post => {
-        if (payload._id !== post.author) {
+        if (String(req.user._id) !== post.author) {
             const err = new Error('Forbidden');
             err.status = 403;
             return next(err);
@@ -128,9 +118,6 @@ router.route('/:postId/comments')
 })
 
 .post(authenticate.isLoggedIn, upload.single('image'), (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader.split(' ')[1];
-    const payload = authenticate.getPayload(token);
     Posts.findById(req.params.postId)
     .then(post => {
         if (!post) {
@@ -141,7 +128,7 @@ router.route('/:postId/comments')
         const comment = {
             postId: post._id,
             text: req.body.text,
-            author: payload._id
+            author: String(req.user._id)
         };
         if (req.file) {
             comment.image = req.file.buffer;
@@ -157,9 +144,6 @@ router.route('/:postId/comments')
 
 router.route('/comments/:commentId')
 .put(authenticate.isLoggedIn, (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader.split(' ')[1];
-    const payload = authenticate.getPayload(token);
     Comments.findById(req.params.commentId)
     .then(comment => {
         if (!comment) {
@@ -167,7 +151,7 @@ router.route('/comments/:commentId')
             err.status = 404;
             return next(err);
         }
-        if (payload._id !== comment.author) {
+        if (String(req.user._id) !== comment.author) {
             const err = new Error('Forbidden');
             err.status = 403;
             return next(err);
@@ -186,9 +170,6 @@ router.route('/comments/:commentId')
 })
 
 .delete(authenticate.isLoggedIn, (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader.split(' ')[1];
-    const payload = authenticate.getPayload(token);
     Comments.findById(req.params.commentId)
     .then(comment => {
         if (!comment) {
@@ -196,7 +177,7 @@ router.route('/comments/:commentId')
             err.status = 404;
             return next(err);
         }
-        if (payload._id !== comment.author) {
+        if (String(req.user._id) !== post.author) {
             const err = new Error('Forbidden');
             err.status = 403;
             return next(err);

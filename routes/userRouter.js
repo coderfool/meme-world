@@ -6,6 +6,8 @@ const fs = require('fs');
 const path = require('path');
 const Users = require('../models/user');
 const authenticate = require('../authenticate');
+const passwordReset = require('../password-reset');
+
 const router = express.Router();
 
 router.use(bodyParser.json());
@@ -26,8 +28,9 @@ const upload = multer({
     }
 });
 
-router.get('/:userId', (req, res, next) => {
-    Users.findById(req.params.userId)
+router.route('/:userId')
+.get((req, res, next) => {
+    Users.findById(req.user._id)
     .then(user => {
         if (!user) {
             const err = new Error('User not found');
@@ -37,6 +40,70 @@ router.get('/:userId', (req, res, next) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(user);
+    })
+    .catch(err => next(err));
+})
+
+.put(authenticate.isLoggedIn, upload.single('image'), (req, res, next) => {
+    if (String(req.user._id) !== req.params.userId) {
+        const err = new Error('Forbidden');
+        err.status = 403;
+        return next(err);
+    }
+    Users.findById(req.user._id)
+    .then(user => {
+        if (!user) {
+            const err = new Error('User not found');
+            err.status = 404;
+            return next(err);
+        }
+        const update = {};
+        if (req.file) {
+            update.image = req.file.buffer;
+        }
+        Users.findByIdAndUpdate(req.user._id, {$set: update}, {new: true})
+        .then(user => {
+            if (req.body.oldPassword && req.body.newPassword) {
+                user.changePassword(req.body.oldPassword, req.body.newPassword)
+                .then(user => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(user);
+                }, )
+                .catch(err => next(err));
+            }
+            else {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(user); 
+            }
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));    
+})
+
+.delete(authenticate.isLoggedIn, (req, res, next) => {
+    if (String(req.user._id) !== req.params.userId) {
+        const err = new Error('Forbidden');
+        err.status = 403;
+        return next(err);
+    }
+    Users.findByIdAndDelete(req.user._id)
+    .then(resp => {
+        res.status(200).end();
+    })
+    .catch(err => next(err));
+});
+
+router.get('/:userId/resetPassword', authenticate.isLoggedIn, (req, res, next) => {
+    Users.findById(req.user._id)
+    .then(user => {
+        passwordReset.resetAndEmail(user)
+        .then(info => {
+            res.status(200).end();
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 });
@@ -87,23 +154,8 @@ router.post('/login', passport.authenticate('local', {session: false}), (req, re
 });
 
 router.get('/logout', authenticate.isLoggedIn, (req, res, next) => {
+    req.logout();
     res.redirect('/');
-});
-
-router.delete('/:userId', authenticate.isLoggedIn, (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    const token = authHeader.split(' ')[1];
-    const payload = authenticate.getPayload(token);
-    if (payload._id !== req.params.userId) {
-        const err = new Error('Forbidden');
-        err.status = 403;
-        return next(err);
-    }
-    Users.findByIdAndDelete(payload._id)
-    .then(resp => {
-        res.status(200).end();
-    })
-    .catch(err => next(err));
 });
 
 module.exports = router;

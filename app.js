@@ -17,15 +17,12 @@ mongoose.connect(config.mongoUrl, {
     useFindAndModify: false,
     useCreateIndex: true
 })
-
 .then((db) => {
     console.log('Connected to MongoDB server');
 })
-
-.catch(err => console.log(err));
+.catch(err => console.error(err));
 
 app.use(express.static(path.join(appRoot, 'public')));
-
 app.use(passport.initialize());
 app.use('/users', userRouter);
 app.use('/posts', postRouter);

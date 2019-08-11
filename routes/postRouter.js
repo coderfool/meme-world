@@ -177,7 +177,7 @@ router.route('/comments/:commentId')
             err.status = 404;
             return next(err);
         }
-        if (String(req.user._id) !== post.author) {
+        if (String(req.user._id) !== comment.author) {
             const err = new Error('Forbidden');
             err.status = 403;
             return next(err);
@@ -185,6 +185,130 @@ router.route('/comments/:commentId')
         Comments.findByIdAndDelete(req.params.commentId)
         .then(resp => {
             res.status(200).end();
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+router.route('/:postId/upvote')
+.get(authenticate.isLoggedIn, (req, res, next) => {
+    Posts.findById(req.params.postId)
+    .then(post => {
+        if (!post) {
+            const err = new Error('Post not found');
+            err.status = 404;
+            return next(err);
+        }
+        const userIndex = post.upvotes.indexOf(req.user._id);
+        if (userIndex === -1) {
+            post.upvotes.push(req.user._id);
+            const downvoteIndex = post.downvotes.indexOf(req.user._id);
+            if (downvoteIndex !== -1) {
+                post.downvotes.splice(downvoteIndex, 1);
+            }
+        }
+        else {
+            post.upvotes.splice(userIndex, 1);
+        }
+        post.save()
+        .then(post => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(post);
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+router.route('/:postId/downvote')
+.get(authenticate.isLoggedIn, (req, res, next) => {
+    Posts.findById(req.params.postId)
+    .then(post => {
+        if (!post) {
+            const err = new Error('Post not found');
+            err.status = 404;
+            return next(err);
+        }
+        const userIndex = post.downvotes.indexOf(req.user._id);
+        if (userIndex === -1) {
+            post.downvotes.push(req.user._id);
+            const upvoteIndex = post.upvotes.indexOf(req.user._id);
+            if (upvoteIndex !== -1) {
+                post.upvotes.splice(upvoteIndex, 1);
+            }
+        }
+        else {
+            post.downvotes.splice(userIndex, 1);
+        }
+        post.save()
+        .then(post => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(post);
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+router.route('/comments/:commentId/upvote')
+.get(authenticate.isLoggedIn, (req, res, next) => {
+    Comments.findById(req.params.commentId)
+    .then(comment => {
+        if (!comment) {
+            const err = new Error('Comment not found');
+            err.status = 404;
+            return next(err);
+        }
+        const userIndex = comment.upvotes.indexOf(req.user._id);
+        if (userIndex === -1) {
+            comment.upvotes.push(req.user._id);
+            const downvoteIndex = comment.downvotes.indexOf(req.user._id);
+            if (downvoteIndex !== -1) {
+                comment.downvotes.splice(downvoteIndex, 1);
+            }
+        }
+        else {
+            comment.upvotes.splice(userIndex, 1);
+        }
+        post.save()
+        .then(post => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(post);
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+router.route('/comments/:commentId/downvote')
+.get(authenticate.isLoggedIn, (req, res, next) => {
+    Comments.findById(req.params.commentId)
+    .then(comment => {
+        if (!comment) {
+            const err = new Error('Comment not found');
+            err.status = 404;
+            return next(err);
+        }
+        const userIndex = comment.downvotes.indexOf(req.user._id);
+        if (userIndex === -1) {
+            comment.downvotes.push(req.user._id);
+            const upvoteIndex = comment.upvotes.indexOf(req.user._id);
+            if (upvoteIndex !== -1) {
+                comment.upvotes.splice(upvoteIndex, 1);
+            }
+        }
+        else {
+            comment.downvotes.splice(userIndex, 1);
+        }
+        post.save()
+        .then(post => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(post);
         })
         .catch(err => next(err));
     })

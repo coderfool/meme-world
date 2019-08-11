@@ -14,14 +14,8 @@ const postSchema = new Schema({
         type: String,
         required: true
     },
-    upvotes: {
-        type: Number,
-        default: 0
-    },
-    downvotes: {
-        type: Number,
-        default: 0
-    }
+    upvotes: [String],
+    downvotes: [String]
 });
 
 module.exports = mongoose.model('Post', postSchema);

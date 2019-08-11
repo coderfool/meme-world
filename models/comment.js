@@ -17,14 +17,8 @@ const commentSchema = new Schema({
     image: {
         type: Buffer
     },
-    upvotes: {
-        type: Number,
-        default: 0
-    },
-    downvotes: {
-        type: Number,
-        default: 0
-    }
+    upvotes: [String],
+    downvotes: [String]
 });
 
 module.exports = mongoose.model('Comment', commentSchema);

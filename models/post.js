@@ -7,7 +7,7 @@ const postSchema = new Schema({
         required: true
     },
     image: {
-        type: Buffer,
+        type: String,
         required: true
     },
     author: {
@@ -16,6 +16,8 @@ const postSchema = new Schema({
     },
     upvotes: [String],
     downvotes: [String]
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model('Post', postSchema);

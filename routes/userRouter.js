@@ -18,19 +18,19 @@ const upload = multer({
     storage: storage,
     limits: {fileSize: 15 * 1024 * 1024},
     fileFilter: (req, file, cb) => {
-        const regex = /\.(jpg|jpeg|png|gif)$/i;
+        const regex = /\.(jpg|jpeg|png)$/i;
         if (regex.test(file.originalname)) {
             cb(null, true);
         }
         else {
-            cb(new Error('Only jpg/jpeg/png/gif files supported'), false);
+            cb(new Error('Only jpg/jpeg/png images are allowed'), false);
         }
     }
 });
 
 router.route('/:userId')
 .get((req, res, next) => {
-    Users.findById(req.user._id)
+    Users.findById(req.params.userId)
     .then(user => {
         if (!user) {
             const err = new Error('User not found');
@@ -96,8 +96,8 @@ router.route('/:userId')
     .catch(err => next(err));
 });
 
-router.get('/:userId/resetPassword', authenticate.isLoggedIn, (req, res, next) => {
-    Users.findById(req.user._id)
+router.get('/:username/resetPassword', (req, res, next) => {
+    Users.findOne({username: req.params.username})
     .then(user => {
         passwordReset.resetAndEmail(user)
         .then(info => {
@@ -122,11 +122,9 @@ router.post('/signup', upload.single('image'), (req, res, next) => {
                 email: req.body.email,
             };
             if (req.file) {
-                user.image = req.file.buffer;
+                user.image = req.file.buffer.toString('base64');
             }
-            else {
-                user.image = fs.readFileSync(path.join(appRoot, 'public/assets/images/user-default.png'));
-            }
+
             Users.register(new Users(user), req.body.password)
             .then(user => {
                 user.save()
@@ -149,6 +147,7 @@ router.post('/login', passport.authenticate('local', {session: false}), (req, re
     res.setHeader('Content-Type', 'application/json');
     res.json({
         success: true,
+        userId: req.user._id,
         token: token
     });
 });

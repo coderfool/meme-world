@@ -13,6 +13,8 @@
     "url": "https://github.com/coderfool/meme-world.git"
   },
   "dependencies": {
+    "@types/angularjs": "^1.5.14-alpha",
+    "angularjs": "0.0.1",
     "body-parser": "^1.19.0",
     "crypto": "^1.0.1",
     "express": "^4.17.1",

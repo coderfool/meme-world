@@ -38,7 +38,7 @@ router.route('/')
 .post(authenticate.isLoggedIn, upload.single('image'), (req, res, next) => {
     Posts.create({
         title: req.body.title,
-        image: req.file.buffer,
+        image: req.file.buffer.toString('base64'),
         author: String(req.user._id)
     })
     .then(post => {

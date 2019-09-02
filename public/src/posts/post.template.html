@@ -1,0 +1,32 @@
+<md-card layout="column" layout-align="start center">
+    <md-card-title>
+        <md-card-title-text>
+            <span class="md-headline">{{$ctrl.post.title}}</span>
+        </md-card-title-text>
+    </md-card-title>
+    <img ng-src="{{$ctrl.imageSrc}}" class="md-card-image" alt="{{$ctrl.post.title}}">
+    <md-list layout="row" layout-align="space-between">
+        <md-list-item>
+            <span class="md-caption">{{$ctrl.post.upvotes.length}} Upvotes</span>
+        </md-list-item>
+        <md-list-item>
+            <span class="md-caption">{{$ctrl.post.downvotes.length}} Downvotes</span>
+        </md-list-item>
+        <md-list-item>
+            <span class="md-caption">0 Comments</span>
+        </md-list-item>
+    </md-list>
+    <md-card-actions layout="row" layout-align="center">
+        <md-button layout="row" layout-align="center center" class="md-icon-button" aria-label="Upvote"
+            ng-class="{'md-accent': $ctrl.upvoted}" ng-click="$ctrl.upvote()">
+            <i class="material-icons md-dark">arrow_upward</i>
+        </md-button>
+        <md-button layout="row" layout-align="center center" class="md-icon-button" aria-label="Downvote"
+            ng-class="{'md-accent': $ctrl.downvoted}" ng-click="$ctrl.downvote()">
+            <i class="material-icons md-dark">arrow_downward</i>
+        </md-button>
+        <md-button layout="row" layout-align="center center"  class="md-icon-button" aria-label="Comment">
+            <i class="material-icons md-dark">comment</i>
+        </md-button>
+    </md-card-actions>
+</md-card>

@@ -1,0 +1,31 @@
+<md-dialog layout="column" layout-padding flex="20">
+    <div layout="row" layout-align="start center">
+        <h1 class="md-headline">Login</h1>
+        <span flex></span>
+        <md-button class="md-icon-button mr-0" aria-label="Close" ng-click="ctrl.close()">
+            <i class="material-icons">close</i>
+        </md-button>
+    </div>
+    <md-dialog-content>
+        <form name="login" layout="column" layout-align="start center">
+            <md-input-container>
+                <label>Username</label>
+                <input type="text" name="username" ng-model="ctrl.username" ng-focus="ctrl.clearErrors()" required>
+                <div ng-messages="login.username.$error"></div>
+            </md-input-container>
+            <md-input-container>
+                <label>Password</label>
+                <input type="password" name="password" ng-model="ctrl.password" ng-focus="ctrl.clearErrors()" required>
+                <div ng-messages="login.password.$error"></div>
+            </md-input-container>
+            <div ng-messages="ctrl.err" role="alert" class="md-body-1 text-center">
+                <span ng-message="unauthorized" md-colors="{color: 'red'}">{{ctrl.messages.unauthorized}}</span>
+                <span ng-message="invalidUsername" md-colors="{color: 'red'}">{{ctrl.messages.invalidUsername}}</span>
+                <span ng-message="passwordReset" md-colors="{color: 'green'}">{{ctrl.messages.passwordReset}}</span>
+                <span ng-message="default" md-colors="{color: 'red'}">{{ctrl.messages.default}}</span>
+            </div>
+            <md-button ng-click="ctrl.resetPassword()">Forgot password</md-button>
+            <md-button type="submit" class="md-raised md-accent" ng-click="ctrl.submit(login.$valid)">Log In</md-button>
+        </form>
+    </md-dialog-content>
+</md-dialog>

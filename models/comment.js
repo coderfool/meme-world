@@ -19,6 +19,8 @@ const commentSchema = new Schema({
     },
     upvotes: [String],
     downvotes: [String]
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model('Comment', commentSchema);

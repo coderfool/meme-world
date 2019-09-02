@@ -1,0 +1,29 @@
+<md-content layout="column" layout-align="start center" flex>
+    <h1>Sign Up</h1>
+    <form name="registration" layout="column" layout-align="start center">
+        <md-input-container>
+            <label>Email</label>
+            <input type="email" name="email" ng-model="ctrl.email" ng-focus="ctrl.clearErrors()" required>
+            <div ng-messages="registration.email.$error">
+                <div ng-message="email">{{ctrl.messages.invalidEmail}}</div>
+            </div>
+        </md-input-container>
+        <md-input-container>
+            <label>Username</label>
+            <input type="text" name="username" ng-model="ctrl.username" ng-focus="ctrl.clearErrors()" required>
+            <div ng-messages="registration.username.$error"></div>
+        </md-input-container>
+        <md-input-container>
+            <label>Password</label>
+            <input type="password" name="password" ng-model="ctrl.password" ng-focus="ctrl.clearErrors()" required>
+            <div ng-messages="registration.password.$error"></div>
+        </md-input-container>
+        <div layout-margin>
+            <label for="profilePic" class="md-button md-raised md-primary">Choose Profile Picture</label>
+            <input class="ng-hide" type="file" accept="image/png, image/jpeg" name="profilePic" id="profilePic" ng-focus="ctrl.clearErrors()">
+        </div>
+        <span ng-if="ctrl.err" md-colors="{color: 'red'}" class="md-body-1" layout-padding>{{ctrl.err}}</span>
+        <span ng-if="ctrl.success" md-colors="{color: 'green'}" class="md-body-1" layout-padding>{{ctrl.success}}</span>
+        <md-button layout-margin type="submit" class="md-raised md-accent" ng-click="ctrl.submit(registration.$valid)">Sign Up</md-button>
+    </form>
+</md-content>

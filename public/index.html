@@ -1,9 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="MemeWorld" ng-controller="AppController as ctrl" ng-cloak>
     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="/css/app.css">
+        <link rel="icon" href="/assets/images/logo.png">
         <title>Meme World</title>
     </head>
-    <body>
-        <p>Meme World</p>
+    <body layout="column">
+        <header>
+            <md-toolbar layout="row" class="md-toolbar-tools">
+                <img src="/assets/images/logo.png" flex="5" layout-padding="20" alt="logo">
+                <a href="/">
+                    <h1>Meme World</h1>
+                </a>
+                <span flex></span>
+                <md-button ui-sref="home" ui-sref-active="active">Home</md-button>
+                <div ng-if="!loggedIn">
+                    <md-button class="md-raised md-accent" ng-click="loginPrompt()">Log In</md-button>
+                    <md-button class="md-raised" ui-sref="registration">Sign Up</md-button>
+                </div>
+                <div ng-if="loggedIn">
+                    <md-menu md-position-mode="target bottom">
+                        <md-button layout="row" layout-align="start center" ng-click="ctrl.showUserMenu($mdMenu, $event)">
+                            {{user.username}}
+                            <i class="material-icons">keyboard_arrow_down</i>
+                        </md-button>
+                        <md-menu-content class="md-dense">
+                            <md-menu-item>
+                                <md-button>Profile</md-button>
+                            </md-menu-item>
+                            <md-menu-divider></md-menu-divider>
+                            <md-menu-item>
+                                <md-button ng-click="ctrl.logOut()">Log Out</md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
+            </md-toolbar>
+        </header>
+        <ui-view flex layout="row"></ui-view>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.22/angular-ui-router.min.js"></script>
+        <script src="src/memeworld.module.js"></script>
+        <script src="src/sidenav/sidenav.component.js"></script>
+        <script src="src/posts/post.component.js"></script>
+        <script src="src/posts/posts.component.js"></script>
+        <script src="src/posts/posts.service.js"></script>
+        <script src="src/registration/registration.controller.js"></script>
+        <script src="src/scripts.js"></script>
     </body>
 </html>

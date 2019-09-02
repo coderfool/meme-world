@@ -28,6 +28,13 @@ const getRandomPassword = (len) => {
 };
 
 module.exports.resetAndEmail = (user) => {
+    if (!user) {
+        const err = {
+            status: 404,
+            message: 'User not found'
+        };
+        return Promise.reject(err);
+    }
     const newPassword = getRandomPassword(3);
     return user.setPassword(newPassword)  
     .then(user => {

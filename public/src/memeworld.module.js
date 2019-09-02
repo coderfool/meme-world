@@ -118,6 +118,7 @@ function LoginController($mdDialog, $http, $rootScope) {
             })
             $rootScope.loggedIn = true;
             ctrl.close();
+            window.location.reload();
         })
         .catch(err => {
             ctrl.err.unauthorized = true;

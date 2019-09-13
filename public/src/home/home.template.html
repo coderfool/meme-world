@@ -1,4 +1,22 @@
 <sidenav></sidenav>
-<md-content layout="row" layout-align="center" layout-margin class="mr-0" flex>
-    <posts flex="75"></posts>
+<md-content layout="column" layout-margin class="mr-0" flex>
+    <div ng-if="showPostForm" layout="row" layout-align="center">
+        <div layout="column" flex="50">
+            <form layout="column" name="addPost">
+                <md-input-container>
+                    <label for="title">Title</label>
+                    <input type="text" name="title" id="title" required>
+                </md-input-container>
+                <!-- <span flex="10"></span> -->
+                <div layout="row">
+                    <label for="image" class="md-button md-raised md-accent">Browse</label>
+                    <input class="ng-hide" type="file" accept="image/png,image/jpeg" name="image" id="image" 
+                        ng-focus="ctrl.clearErrors()" required>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div layout="row" layout-align="center">
+        <posts flex="75"></posts>
+    </div>
 </md-content>

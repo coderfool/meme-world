@@ -1,12 +1,18 @@
 angular.module('MemeWorld')
 .service('PostsService', PostsService);
 
-PostsService.$inject = ['$http'];
+PostsService.$inject = ['$http', '$q'];
 
-function PostsService ($http) {
+function PostsService ($http, $q) {
     const service = this;
 
     service.getPosts = function() {
-        return $http.get('../posts');
+        const cancel = $q.defer();
+        return $http({
+            method: 'GET',
+            url: '../posts',
+            timeout: cancel.promise,
+            cancel: cancel
+        });
     } 
 }

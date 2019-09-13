@@ -121,8 +121,9 @@ router.post('/signup', upload.single('image'), (req, res, next) => {
                 username: req.body.username,
                 email: req.body.email,
             };
+            
             if (req.file) {
-                user.image = req.file.buffer.toString('base64');
+                user.image = req.file.buffer.toString('base64');  
             }
 
             Users.register(new Users(user), req.body.password)

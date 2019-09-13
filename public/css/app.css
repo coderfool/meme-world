@@ -9,3 +9,36 @@
 .text-center {
     text-align: center;
 }
+
+.spinner {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 100;
+}
+
+.img-responsive {
+    max-width: 100%;
+}
+
+.relative {
+    position: relative;
+}
+
+.top-right {
+    position: absolute;
+    top: 5px;
+    right: 0;
+}
+
+.white-bg {
+    background-color: #fff !important;
+}
+
+.remove-btn:hover {
+    background-color: #fff !important;
+}
+
+.avatar {
+    border-radius: 50%;
+}

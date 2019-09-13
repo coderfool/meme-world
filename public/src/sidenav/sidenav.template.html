@@ -6,7 +6,6 @@
     md-whiteframe 
     md-component-id="left" 
     md-is-locked-open="$mdMedia('gt-md')">
-    <h1 class="md-title">Filter Posts</h1>
     <md-list>
         <md-list-item>
             <md-button 
@@ -21,4 +20,5 @@
             </md-button>
         </md-list-item>
     </md-list>
+    <md-button class="md-raised md-accent" ng-click="$ctrl.addPostDialog()">Add Post</md-button>
 </md-sidenav>

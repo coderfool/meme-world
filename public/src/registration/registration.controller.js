@@ -8,21 +8,19 @@ function RegistrationController($http) {
     ctrl.username = '';
     ctrl.email = '';
     ctrl.password = '';
+    ctrl.image = null;
+    ctrl.imgSrc = '';
 
     ctrl.messages = {
-        usernameTaken: 'Username is taken',
-        invalidEmail: 'Please enter valid email',
+        invalidEmail: 'Please enter a valid email',
         imageTooLarge: 'Max. image size should be 15 MB'
     }
 
-    ctrl.uploadImage = function() {
-        const file = document.querySelector('#profilePic').files[0];
-        const fr = new FileReader();
-        fr.onload = function() {
-            ctrl.profilePic = 'data:image/png;base64,' + fr.result;
-            console.log(ctrl.profilePic);
-        }
-        fr.readAsDataURL(file);
+    ctrl.removeImage = function() {
+        ctrl.image = null;
+        ctrl.imgSrc = '';
+        document.getElementById('image').value = '';
+        ctrl.clearErrors();
     }
 
     ctrl.clearErrors = function() {
@@ -33,17 +31,32 @@ function RegistrationController($http) {
         if (!valid) {
             return;
         }
+        
+        const formData = new FormData();
+        formData.append('email', ctrl.email);
+        formData.append('username', ctrl.username);
+        formData.append('password', ctrl.password);
 
-        $http.post('../users/signup', {
-            username: ctrl.username,
-            email: ctrl.email, 
-            password: ctrl.password
+        if (ctrl.image) {
+            formData.append('image', ctrl.image);
+        } 
+        
+        $http.post('../users/signup', formData, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
         })
         .then(res => {
-            ctrl.success = 'You have been registered';
+            registration.reset();
+            ctrl.removeImage();
+            ctrl.success = 'You have been registered. Please login to continue.';
         })
         .catch(err => {
-            ctrl.err = err.data.error.message;
+            if (err.data.error.status === 413) {
+                ctrl.err = ctrl.messages.imageTooLarge;
+            }
+            else {
+                ctrl.err = err.data.error.message;
+            }
         });
     }
 }

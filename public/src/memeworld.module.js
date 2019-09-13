@@ -1,7 +1,17 @@
-angular.module('MemeWorld', ['ngMaterial', 'ngMessages', 'ui.router'])
+angular.module('MemeWorld', ['ngMaterial', 'ngMessages', 'ui.router', 'ui.router.state.events'])
 .config(config)
 .factory('jwtInterceptor', jwtInterceptor)
-.controller('AppController', AppController);
+.factory('loadingHttpInterceptor', loadingHttpInterceptor)
+.controller('AppController', AppController)
+.run(['$rootScope', '$http', function($rootScope, $http) {
+    $rootScope.$on('$stateChangeStart', function() {
+        $http.pendingRequests.forEach(function(request) {
+            if (request.cancel) {
+                request.cancel.resolve();
+            }
+        });
+    });
+}]);
 
 config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider'];
 
@@ -20,14 +30,18 @@ function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProv
     $urlRouterProvider.otherwise('/');
     $locationProvider.hashPrefix('');
     $httpProvider.interceptors.push('jwtInterceptor');
+    $httpProvider.interceptors.push('loadingHttpInterceptor');
 }
 
-AppController.$inject = ['$mdDialog', '$mdMedia', '$rootScope'];
+AppController.$inject = ['$mdDialog', '$mdMedia', '$rootScope', '$http'];
 
-function AppController($mdDialog, $mdMedia, $rootScope) {
+function AppController($mdDialog, $mdMedia, $rootScope, $http) {
     const ctrl = this;
     $rootScope.loggedIn = (localStorage.getItem('jwt') !== null);
     $rootScope.user = JSON.parse(localStorage.getItem('user'));
+    if ($rootScope.loggedIn) {
+        ctrl.userImage = 'data:image/png;base64,' + $rootScope.user.image;
+    }
     
     $rootScope.loginPrompt = function() {
         $mdDialog.show({
@@ -46,11 +60,15 @@ function AppController($mdDialog, $mdMedia, $rootScope) {
     ctrl.logOut = function() {
         localStorage.removeItem('jwt');
         localStorage.removeItem('user');
-        window.location.reload();
-        setTimeout(function() {
+        $http.get('../users/logout')
+        .then(res => {
             $rootScope.loggedIn = false;
             $rootScope.user = null;
-        }, 1000);
+        })
+        .catch(err => {
+            console.error(err);
+        });
+        window.location.reload();
     }
 }
 
@@ -112,13 +130,15 @@ function LoginController($mdDialog, $http, $rootScope) {
             .then(res => {
                 localStorage.setItem('user', JSON.stringify(res.data));
                 $rootScope.user = res.data;
+                ctrl.close();
+                setTimeout(function() {
+                    $rootScope.loggedIn = true;
+                }, 1000);
+                window.location.reload();
             })
             .catch(err => {
                 console.error(err.data);
             })
-            $rootScope.loggedIn = true;
-            ctrl.close();
-            window.location.reload();
         })
         .catch(err => {
             ctrl.err.unauthorized = true;
@@ -138,6 +158,34 @@ function jwtInterceptor($q) {
             return config;
         },
         requestError: function(err) {
+            return $q.reject(err);
+        }
+    };
+}
+
+loadingHttpInterceptor.$inject = ['$rootScope', '$q'];
+
+function loadingHttpInterceptor($rootScope, $q) {
+    let loadingCount = 0;
+    const eventName = 'httpLoading';
+
+    return {
+        request: function(config) {
+            if (++loadingCount === 1) {
+                $rootScope.$broadcast(eventName, {on: true});
+            }
+            return config;
+        },
+        response: function(res) {
+            if (--loadingCount === 0) {
+                $rootScope.$broadcast(eventName, {on: false});
+            }
+            return res;
+        },
+        responseError: function(err) {
+            if (--loadingCount === 0) {
+                $rootScope.$broadcast(eventName, {on: false});
+            }
             return $q.reject(err);
         }
     };

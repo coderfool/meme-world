@@ -39,7 +39,7 @@ function AppController($mdDialog, $mdMedia, $rootScope, $http) {
     const ctrl = this;
     $rootScope.loggedIn = (localStorage.getItem('jwt') !== null);
     $rootScope.user = JSON.parse(localStorage.getItem('user'));
-    if ($rootScope.loggedIn) {
+    if ($rootScope.user && $rootScope.user.image) {
         ctrl.userImage = 'data:image/png;base64,' + $rootScope.user.image;
     }
     

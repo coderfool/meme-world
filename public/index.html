@@ -24,7 +24,7 @@
                 <div ng-if="loggedIn" layout="row">
                     <md-menu md-position-mode="target-right bottom target" md-offset="-5 5">
                         <md-button layout="row" layout-align="start center" ng-click="ctrl.showUserMenu($mdMenu, $event)">
-                            <img flex="35" class="avatar" layout-padding ng-if="ctrl.userImage" ng-src="{{ctrl.userImage}}">
+                            <img flex="25" class="avatar" layout-padding ng-if="ctrl.userImage" ng-src="{{ctrl.userImage}}">
                             {{user.username}}
                             <i md-menu-origin class="material-icons">keyboard_arrow_down</i>
                         </md-button>

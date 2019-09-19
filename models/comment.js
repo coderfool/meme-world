@@ -14,8 +14,17 @@ const commentSchema = new Schema({
         type: String,
         required: true
     },
+    username: {
+        type: String,
+        required: true
+    },
+    profilePic: {
+        type: String,
+        default: ''
+    },
     image: {
-        type: Buffer
+        type: String,
+        default: ''
     },
     upvotes: [String],
     downvotes: [String]

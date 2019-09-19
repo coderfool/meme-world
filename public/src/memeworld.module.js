@@ -4,7 +4,7 @@ angular.module('MemeWorld', ['ngMaterial', 'ngMessages', 'ui.router', 'ui.router
 .factory('loadingHttpInterceptor', loadingHttpInterceptor)
 .controller('AppController', AppController)
 .run(['$rootScope', '$http', function($rootScope, $http) {
-    $rootScope.$on('$stateChangeStart', function() {
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
         $http.pendingRequests.forEach(function(request) {
             if (request.cancel) {
                 request.cancel.resolve();
@@ -25,6 +25,16 @@ function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProv
         url: '/registration',
         templateUrl: 'src/registration/registration.template.html',
         controller: 'RegistrationController as ctrl'
+    })
+    .state('post', {
+        url: '/posts/{postId}',
+        templateUrl: 'src/posts/post-expanded.template.html',
+        controller: 'ExpandedPostController as ctrl',
+        resolve: {
+            postId: ['$stateParams', function($stateParams) {
+                return $stateParams.postId;
+            }]
+        }
     });
 
     $urlRouterProvider.otherwise('/');
@@ -39,6 +49,8 @@ function AppController($mdDialog, $mdMedia, $rootScope, $http) {
     const ctrl = this;
     $rootScope.loggedIn = (localStorage.getItem('jwt') !== null);
     $rootScope.user = JSON.parse(localStorage.getItem('user'));
+    $rootScope.orderPosts = '-upvotes.length';
+    
     if ($rootScope.user && $rootScope.user.image) {
         ctrl.userImage = 'data:image/png;base64,' + $rootScope.user.image;
     }

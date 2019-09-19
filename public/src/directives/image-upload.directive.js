@@ -2,7 +2,7 @@ angular.module('MemeWorld')
 .directive('imageUpload', ['$rootScope', function($rootScope) {
     return {
         restrict: 'A',
-        link: function(scope, element, attrs) {            
+        link: function(scope, element, attrs) {
             element.on('change', function(event) {
                 const targetElem = event.target;
                 if (targetElem.files && targetElem.files[0]) {
@@ -10,8 +10,8 @@ angular.module('MemeWorld')
                     const reader = new FileReader();
                     const eventName = 'httpLoading';   
                     reader.onload = function(event) {        
-                        scope.ctrl.imgSrc = 'data:image/png;base64,' + window.btoa(event.target.result);
-                        scope.ctrl.image = file;
+                        scope[attrs.controllerAs].imgSrc = 'data:image/png;base64,' + window.btoa(event.target.result);
+                        scope[attrs.controllerAs].image = file;
                         $rootScope.$broadcast(eventName, {on: false});
                         $rootScope.$digest();
                     }
@@ -23,3 +23,7 @@ angular.module('MemeWorld')
         }
     };
 }]);
+
+function ImageUploadController() {
+    const ctrl = this;
+}

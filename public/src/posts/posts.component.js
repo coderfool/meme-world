@@ -12,11 +12,14 @@ function PostsController(PostsService) {
         default: 'Something went wrong. Please check your internet connection and try again.'
     };
     ctrl.posts = [];
-    const posts = PostsService.getPosts();
+    posts = PostsService.getPosts();
     posts.then(res => {
         ctrl.posts = res.data;
+        console.log(ctrl.posts);
     })
     .catch(err => {
-        ctrl.err = true;
+        if (err.xhrStatus !== 'abort') {
+            ctrl.err = true;
+        }
     });
 }

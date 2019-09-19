@@ -9,8 +9,15 @@ SideNav.$inject = ['$mdSidenav', '$rootScope', '$mdDialog', '$mdMedia'];
 function SideNav($mdSidenav, $rootScope, $mdDialog, $mdMedia) {
     const ctrl = this;
     ctrl.selectedFilter = 'popular';
-    ctrl.setFilter = function (filter) {
+    
+    ctrl.setFilter = function(filter) {
         ctrl.selectedFilter = filter;
+        if (filter === 'popular') {
+            $rootScope.orderPosts = '-upvotes.length';
+        }
+        else if (filter === 'new') {
+            $rootScope.orderPosts = '-createdAt';
+        }
     }
 
     ctrl.addPostDialog = function() {
@@ -46,7 +53,6 @@ function NewPostController($mdDialog, $http) {
     ctrl.removeImage = function() {
         ctrl.image = null;
         ctrl.imgSrc = '';
-        document.getElementById('image').value = '';
         ctrl.clearErrors();
     };
 

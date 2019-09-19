@@ -42,3 +42,37 @@
 .avatar {
     border-radius: 50%;
 }
+
+.full-width {
+    width: 100%;
+}
+
+.width-80 {
+    width: 80%;
+}
+
+.list-unstyled {
+    list-style: none;
+}
+
+.padding-top-10 {
+    padding-top: 10px;
+}
+
+.text-small {
+    font-size: 16px;
+}
+
+.comment-actions {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 20px !important;
+}
+
+.underlined {
+    text-decoration-line: underline;
+}
+
+html {
+    overflow-y: scroll !important;
+}

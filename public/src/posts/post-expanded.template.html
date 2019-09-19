@@ -1,0 +1,47 @@
+<div ng-if="ctrl.post" layout="column" flex="75">
+    <div layout="row" layout-align="center">
+        <h1 ng-if="ctrl.err" class="md-display-1">{{ctrl.messages.default}}</h1>
+        <h1 class="md-headline">{{ctrl.post.title}}</h1>
+    </div>
+    <div layout="row" layout-align="center">
+        <img ng-src="data:image/png;base64,{{ctrl.post.image}}" class="img-responsive">
+    </div>
+    <div layout="column" layout-margin>
+        <div ng-if="ctrl.imgSrc" layout="row">
+            <div layout="row" flex="50">
+                <div class="relative">
+                    <img ng-src="{{ctrl.imgSrc}}" class="img-responsive">
+                    <md-button class="md-icon-button white-bg remove-btn top-right" aria-label="Close" ng-click="ctrl.removeImage()">
+                        <i class="material-icons">close</i>
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <form name="commentForm" layout="row" layout-align="center center" flex>
+            <md-input-container class="width-80">
+                <label>Your comment</label>
+                <input type="text" name="comment" ng-model="ctrl.newComment">
+            </md-input-container>
+            <label for="image" class="md-button">
+                <i class="material-icons">add_photo_alternate</i>
+            </label>
+            <input image-upload controller-as="ctrl" type="file" accept="image/png,image/jpeg" name="image" id="image" class="ng-hide"> 
+            <span flex></span>
+            <md-button type="submit" class="md-raised md-accent" ng-click="ctrl.submitComment(commentForm.$valid)">Comment</md-button>
+        </form>
+        <h1 class="md-title" ng-if="ctrl.post.comments.length === 0">{{ctrl.messages.commentsEmpty}}</h1>
+        <div ng-if="ctrl.post.comments.length > 0" class="list-unstyled">
+            <md-button 
+                ng-class="{'md-accent underlined': ctrl.selectedFilter === 'top'}"
+                ng-click="ctrl.setFilter('top')"
+                class="underlined">Top
+            </md-button>
+            <md-button 
+                ng-class="{'md-accent underlined': ctrl.selectedFilter === 'new'}"
+                ng-click="ctrl.setFilter('new')">New
+            </md-button>
+            <md-divider></md-divider>
+            <comment ng-repeat="comment in ctrl.post.comments | orderBy: ctrl.orderComments" data="comment"></comment>
+        </div>
+    </div>
+</div>

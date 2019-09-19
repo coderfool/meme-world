@@ -19,7 +19,6 @@ function RegistrationController($http) {
     ctrl.removeImage = function() {
         ctrl.image = null;
         ctrl.imgSrc = '';
-        document.getElementById('image').value = '';
         ctrl.clearErrors();
     }
 

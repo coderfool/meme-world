@@ -13,7 +13,7 @@
             <span class="md-caption">{{$ctrl.post.downvotes.length}} Downvotes</span>
         </md-list-item>
         <md-list-item>
-            <span class="md-caption">0 Comments</span>
+            <span class="md-caption">{{$ctrl.post.commentCount}} Comments</span>
         </md-list-item>
     </md-list>
     <md-card-actions layout="row" layout-align="center">
@@ -25,7 +25,8 @@
             ng-class="{'md-accent': $ctrl.downvoted}" ng-click="$ctrl.downvote()">
             <i class="material-icons md-dark">arrow_downward</i>
         </md-button>
-        <md-button layout="row" layout-align="center center"  class="md-icon-button" aria-label="Comment">
+        <md-button layout="row" layout-align="center center"  class="md-icon-button" aria-label="Comment"
+            ui-sref="post({postId: $ctrl.post._id})">
             <i class="material-icons md-dark">comment</i>
         </md-button>
     </md-card-actions>

@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const Posts = require('../models/post');
+const Users = require('../models/user');
 const Comments = require('../models/comment');
 const authenticate = require('../authenticate');
 const router = express.Router();
@@ -28,11 +29,26 @@ router.route('/')
 .get((req, res, next) => {
     Posts.find()
     .then(posts => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(posts);
+        let promises = [];
+        for (let i = 0; i < posts.length; i++) {
+            promises.push(Comments.find({postId: posts[i]._id}));
+        }
+        Promise.all(promises)
+        .then(comments => {
+            for (let i = 0; i < comments.length; i++) {
+                posts[i].set('commentCount', comments[i].length, Number, {strict: false});
+            }
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(posts);
+        })
+        .catch(err => {
+            next(err);
+        });
     })
-    .catch(err => next(err));
+    .catch(err => {
+        next(err);
+    });
 })
 
 .post(authenticate.isLoggedIn, upload.single('image'), (req, res, next) => {
@@ -125,17 +141,32 @@ router.route('/:postId/comments')
             err.status = 404;
             return next(err);
         }
-        const comment = {
-            postId: post._id,
-            text: req.body.text,
-            author: String(req.user._id)
-        };
-        if (req.file) {
-            comment.image = req.file.buffer;
-        }
-        Comments.create(comment)
-        .then(comment => {
-            res.status(200).end();
+        Users.findById(req.user._id)
+        .then(user => {
+            if (!user) {
+                const err = new Error('Post not found');
+                err.status = 404;
+                return next(err);
+            }
+            const comment = {
+                postId: post._id,
+                text: req.body.text,
+                author: String(user._id),
+                username: user.username,
+            };
+            if (user.image) {
+                comment.profilePic = user.image
+            }
+            if (req.file) {
+                comment.image = req.file.buffer.toString('base64');
+            }
+            Comments.create(comment)
+            .then(comment => {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(comment);
+            })
+            .catch(err => next(err));
         })
         .catch(err => next(err));
     })
@@ -273,11 +304,11 @@ router.route('/comments/:commentId/upvote')
         else {
             comment.upvotes.splice(userIndex, 1);
         }
-        post.save()
-        .then(post => {
+        comment.save()
+        .then(comment => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.json(post);
+            res.json(comment);
         })
         .catch(err => next(err));
     })
@@ -304,11 +335,11 @@ router.route('/comments/:commentId/downvote')
         else {
             comment.downvotes.splice(userIndex, 1);
         }
-        post.save()
-        .then(post => {
+        comment.save()
+        .then(comment => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.json(post);
+            res.json(comment);
         })
         .catch(err => next(err));
     })

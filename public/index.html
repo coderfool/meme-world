@@ -16,7 +16,7 @@
                 <img src="/assets/images/logo.png" flex="5" layout-padding="20" alt="logo">
                 <a href="/">Meme World</a>
                 <span flex></span>
-                <md-button ui-sref="home" ui-sref-active="active">Home</md-button>
+                <md-button ui-sref="home" ui-sref-active="md-primary white-bg">Home</md-button>
                 <div ng-if="!loggedIn">
                     <md-button class="md-raised md-accent" ng-click="loginPrompt()">Log In</md-button>
                     <md-button class="md-raised" ui-sref="registration">Sign Up</md-button>
@@ -24,7 +24,7 @@
                 <div ng-if="loggedIn" layout="row" flex="15">
                     <md-menu md-position-mode="target-right bottom target" md-offset="-5 5">
                         <md-button layout="row" layout-align="start center" ng-click="ctrl.showUserMenu($mdMenu, $event)">
-                            <img flex="35" class="avatar" layout-padding ng-if="ctrl.userImage" ng-src="{{ctrl.userImage}}">
+                            <img flex="35" class="avatar" layout-padding ng-if="user.image" ng-src="data:image/png;base64,{{user.image}}">
                             {{user.username}}
                             <i md-menu-origin class="material-icons">keyboard_arrow_down</i>
                         </md-button>

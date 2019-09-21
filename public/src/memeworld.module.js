@@ -47,12 +47,26 @@ AppController.$inject = ['$mdDialog', '$mdMedia', '$rootScope', '$http'];
 
 function AppController($mdDialog, $mdMedia, $rootScope, $http) {
     const ctrl = this;
-    $rootScope.loggedIn = (localStorage.getItem('jwt') !== null);
-    $rootScope.user = JSON.parse(localStorage.getItem('user'));
-    $rootScope.orderPosts = '-upvotes.length';
-    
-    if ($rootScope.user && $rootScope.user.image) {
-        ctrl.userImage = 'data:image/png;base64,' + $rootScope.user.image;
+    const jwt = localStorage.getItem('jwt');
+    if (jwt === null) {
+        $rootScope.loggedIn = false;
+    }
+    else {
+        $http.get(`../users/verifyJWT/${jwt}`)
+        .then(res => {
+            if (res.data.expired) {
+                $rootScope.loggedIn = false;
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('user');
+            }
+            else {
+                $rootScope.loggedIn = true;
+                $rootScope.user = JSON.parse(localStorage.getItem('user'));
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        })
     }
     
     $rootScope.loginPrompt = function() {
@@ -115,7 +129,6 @@ function LoginController($mdDialog, $http, $rootScope) {
         $http.get(`../users/${ctrl.username}/resetPassword`)
         .then(res => {
             ctrl.err.passwordReset = true;
-            console.log('password reset');
         })
         .catch(err => {
             if (err.data && err.data.error.status === 404) {
@@ -149,7 +162,7 @@ function LoginController($mdDialog, $http, $rootScope) {
                 window.location.reload();
             })
             .catch(err => {
-                console.error(err.data);
+                console.error(err);
             })
         })
         .catch(err => {

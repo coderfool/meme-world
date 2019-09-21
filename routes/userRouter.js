@@ -2,8 +2,6 @@ const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
 const Users = require('../models/user');
 const authenticate = require('../authenticate');
 const passwordReset = require('../password-reset');
@@ -150,6 +148,19 @@ router.post('/login', passport.authenticate('local', {session: false}), (req, re
         success: true,
         userId: req.user._id,
         token: token
+    });
+});
+
+router.get('/verifyJWT/:jwt', (req, res, next) => {
+    const payload = authenticate.getPayload(req.params.jwt);
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    let expired = true;
+    if (payload.exp > Date.now().valueOf() / 1000) {
+        expired = false;
+    }
+    res.json({
+        expired: expired,
     });
 });
 

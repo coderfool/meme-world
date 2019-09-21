@@ -2,6 +2,9 @@ angular.module('MemeWorld')
 .directive('imageUpload', ['$rootScope', function($rootScope) {
     return {
         restrict: 'A',
+        scope: {
+            previewImage: '<'
+        },
         link: function(scope, element, attrs) {
             element.on('change', function(event) {
                 const targetElem = event.target;
@@ -10,11 +13,11 @@ angular.module('MemeWorld')
                     const reader = new FileReader();
                     const eventName = 'httpLoading';   
                     reader.onload = function(event) {        
-                        scope[attrs.controllerAs].imgSrc = 'data:image/png;base64,' + window.btoa(event.target.result);
-                        scope[attrs.controllerAs].image = file;
+                        const imgSrc = 'data:image/png;base64,' + window.btoa(event.target.result);
+                        scope.previewImage(imgSrc, file);
                         $rootScope.$broadcast(eventName, {on: false});
                         $rootScope.$digest();
-                    }
+                    };
                     reader.readAsBinaryString(file);
                     $rootScope.$broadcast(eventName, {on: true});
                     $rootScope.$digest();

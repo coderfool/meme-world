@@ -1,0 +1,37 @@
+<md-dialog layout-padding flex="50">
+    <md-dialog-content>
+        <div layout="row" layout-align="start center">
+            <h1 class="md-headline">Edit Comment</h1>
+            <span flex></span>
+            <md-button class="md-icon-button mr-0" aria-label="Close" ng-click="ctrl.cancel()">
+                <i class="material-icons">close</i>
+            </md-button>
+        </div>
+        <div layout="column" layout-margin>
+            <div ng-if="ctrl.imgSrc" layout="row">
+                <div layout="row" flex="50">
+                    <div class="relative">
+                        <img ng-src="{{ctrl.imgSrc}}" class="img-responsive">
+                        <md-button class="md-icon-button white-bg remove-btn top-right" aria-label="Close" ng-click="ctrl.removeImage()">
+                            <i class="material-icons">close</i>
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+            <h1>{{ctrl.setImage}}</h1>
+            <form name="editCommentForm" layout="row" layout-align="center center" flex>
+                <md-input-container class="width-80">
+                    <label>Your comment</label>
+                    <input type="text" name="comment" ng-model="ctrl.comment.text" ng-focus="ctrl.clearErrors()">
+                </md-input-container>
+                <label for="updatedImage" class="md-button">
+                    <i class="material-icons">add_photo_alternate</i>
+                </label>
+                <input image-upload preview-image="ctrl.setImageSrc" type="file" accept="image/png,image/jpeg" name="updatedImage" id="updatedImage" class="ng-hide"> 
+                <span flex></span>
+                <md-button type="submit" class="md-raised md-accent" ng-click="ctrl.saveComment(editCommentForm.$valid)">Save</md-button>
+            </form>
+            <span ng-if="ctrl.err" md-colors="{color: 'red'}" class="md-body-1" layout-padding>{{ctrl.err}}</span>
+        </div>
+    </md-dialog-content>
+</md-dialog>

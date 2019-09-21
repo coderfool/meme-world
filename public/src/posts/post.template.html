@@ -1,10 +1,12 @@
-<md-card layout="column" layout-align="start center">
+<md-card layout="column" layout-align="start center" class="relative">
     <md-card-title>
         <md-card-title-text>
             <span class="md-headline">{{$ctrl.post.title}}</span>
         </md-card-title-text>
     </md-card-title>
-    <img ng-src="{{$ctrl.imageSrc}}" class="md-card-image" alt="{{$ctrl.post.title}}">
+    <a ui-sref="post({postId: $ctrl.post._id})">
+        <img ng-src="{{$ctrl.imageSrc}}" class="md-card-image img-responsive" alt="{{$ctrl.post.title}}">
+    </a>
     <md-list layout="row" layout-align="space-between">
         <md-list-item>
             <span class="md-caption">{{$ctrl.post.upvotes.length}} Upvotes</span>
@@ -30,4 +32,5 @@
             <i class="material-icons md-dark">comment</i>
         </md-button>
     </md-card-actions>
+    <span class="bottom-right font-12">{{$ctrl.post.date}}</span>
 </md-card>

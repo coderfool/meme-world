@@ -7,15 +7,16 @@ angular.module('MemeWorld')
     }
 });
 
-PostController.$inject = ['$rootScope', '$http'];
+PostController.$inject = ['$rootScope', '$http', 'PostsService'];
 
-function PostController($rootScope, $http) {
+function PostController($rootScope, $http, PostsService) {
     const ctrl = this;
     
     ctrl.$onInit = function() {
         ctrl.imageSrc = 'data:image/png;base64,' + ctrl.post.image;
         ctrl.upvoted = isUpvoted();
         ctrl.downvoted = isDownvoted();
+        ctrl.post.date = new Date(ctrl.post.createdAt).toDateString();
     }
 
     function isUpvoted() {
@@ -52,6 +53,13 @@ function PostController($rootScope, $http) {
             ctrl.post = res.data;
             ctrl.upvoted = isUpvoted();
             ctrl.downvoted = isDownvoted();
+            PostsService.getComments(ctrl.post._id)
+            .then(res => {
+                ctrl.post.commentCount = res.data.length;
+            })
+            .catch(err => {
+                console.error(err);
+            });
         })
         .catch(err => {
             console.error(err);
@@ -68,6 +76,13 @@ function PostController($rootScope, $http) {
             ctrl.post = res.data;
             ctrl.upvoted = isUpvoted();
             ctrl.downvoted = isDownvoted();
+            PostsService.getComments(ctrl.post._id)
+            .then(res => {
+                ctrl.post.commentCount = res.data.length;
+            })
+            .catch(err => {
+                console.error(err);
+            });
         })
         .catch(err => {
             console.error(err);

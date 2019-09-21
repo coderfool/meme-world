@@ -2,10 +2,6 @@
     margin-right: 0 !important;
 }
 
-.active {
-    text-decoration-line: underline !important;
-}
-
 .text-center {
     text-align: center;
 }
@@ -29,6 +25,12 @@
     position: absolute;
     top: 5px;
     right: 0;
+}
+
+.bottom-right {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
 }
 
 .white-bg {
@@ -59,8 +61,12 @@
     padding-top: 10px;
 }
 
-.text-small {
+.font-16 {
     font-size: 16px;
+}
+
+.font-12 {
+    font-size: 12px;
 }
 
 .comment-actions {

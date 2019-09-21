@@ -6,14 +6,15 @@
         </md-button>
         <md-menu-content class="md-dense">
             <md-menu-item>
-                <md-button ng-click="">Edit</md-button>
+                <md-button ng-click="$ctrl.showEditDialog()">Edit</md-button>
             </md-menu-item>
             <md-menu-divider></md-menu-divider>
             <md-menu-item>
-                <md-button ng-click="">Delete</md-button>
+                <md-button ng-click="$ctrl.showRemoveDialog()">Delete</md-button>
             </md-menu-item>
         </md-menu-content>
     </md-menu>
+    <span class="bottom-right font-12">{{$ctrl.comment.date}}</span>
     <div flex="10">
         <img flex="80" ng-if="$ctrl.comment.profilePic" class="avatar" ng-src="data:image/png;base64,{{$ctrl.comment.profilePic}}">
     </div>
@@ -27,11 +28,11 @@
         </div>
         <div>
             <md-button class="md-icon-button comment-actions" ng-class="{'md-accent': $ctrl.upvoted}" ng-click="$ctrl.upvote()">
-                <i class="material-icons md-dark text-small">arrow_upward</i>
+                <i class="material-icons md-dark font-16">arrow_upward</i>
             </md-button>
             <small>{{$ctrl.comment.upvotes.length}}</small>
             <md-button class="md-icon-button comment-actions" ng-class="{'md-accent': $ctrl.downvoted}" ng-click="$ctrl.downvote()">
-                <i class="material-icons md-dark text-small">arrow_downward</i>
+                <i class="material-icons md-dark font-16">arrow_downward</i>
             </md-button>
             <small>{{$ctrl.comment.downvotes.length}}</small>
         </div>

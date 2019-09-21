@@ -7,7 +7,7 @@ const Comments = require('../models/comment');
 const authenticate = require('../authenticate');
 const router = express.Router();
 
-router.use(bodyParser.json());
+router.use(bodyParser.json({limit: '20mb'}));
 
 const storage = multer.memoryStorage();
 
@@ -58,7 +58,9 @@ router.route('/')
         author: String(req.user._id)
     })
     .then(post => {
-        res.redirect(`/posts/${post._id}`);
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(post);
     })
     .catch(err => next(err));
 });
@@ -134,6 +136,11 @@ router.route('/:postId/comments')
 })
 
 .post(authenticate.isLoggedIn, upload.single('image'), (req, res, next) => {
+    if (!req.body.text && !req.file) {
+        const err = new Error('Comment cannot be empty');
+        err.status = 403;
+        return next(err);
+    }
     Posts.findById(req.params.postId)
     .then(post => {
         if (!post) {
@@ -150,16 +157,20 @@ router.route('/:postId/comments')
             }
             const comment = {
                 postId: post._id,
-                text: req.body.text,
                 author: String(user._id),
                 username: user.username,
             };
-            if (user.image) {
-                comment.profilePic = user.image
+            if (req.body.text) {
+                comment.text = req.body.text;
             }
             if (req.file) {
                 comment.image = req.file.buffer.toString('base64');
             }
+            if (user.image) {
+                comment.profilePic = user.image
+            }
+            console.log(comment);
+            
             Comments.create(comment)
             .then(comment => {
                 res.statusCode = 200;

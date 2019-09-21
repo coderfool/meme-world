@@ -14,7 +14,7 @@ function PostsService ($http, $q) {
             timeout: cancel.promise,
             cancel: cancel
         });
-    }
+    };
 
     service.getPost = function(postId) {
         const cancel = $q.defer();
@@ -24,7 +24,7 @@ function PostsService ($http, $q) {
             timeout: cancel.promise,
             cancel: cancel
         });
-    }
+    };
 
     service.getComments = function(postId) {
         const cancel = $q.defer();
@@ -34,7 +34,7 @@ function PostsService ($http, $q) {
             timeout: cancel.promise,
             cancel: cancel
         });
-    }
+    };
 
     service.addComment = function(postId, comment) {
         if (comment.text === '' && !comment.image) {
@@ -48,10 +48,18 @@ function PostsService ($http, $q) {
         if (comment.image) {
             formData.append('image', comment.image);
         }
-        
+    
         return $http.post(`../posts/${postId}/comments`, formData, {
             transformRequest: angular.identity,
             headers: {'Content-Type': undefined}
         });
-    }
+    };
+
+    service.editComment = function(comment) {
+        if (comment.text === '' && !comment.image) {
+            return Promise.reject('Comment cannot be empty');
+        }
+        
+        return $http.put(`../posts/comments/${comment.id}`, comment);
+    };
 }

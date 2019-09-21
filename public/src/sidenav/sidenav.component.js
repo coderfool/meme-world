@@ -12,13 +12,8 @@ function SideNav($mdSidenav, $rootScope, $mdDialog, $mdMedia) {
     
     ctrl.setFilter = function(filter) {
         ctrl.selectedFilter = filter;
-        if (filter === 'popular') {
-            $rootScope.orderPosts = '-upvotes.length';
-        }
-        else if (filter === 'new') {
-            $rootScope.orderPosts = '-createdAt';
-        }
-    }
+        $rootScope.orderPostsBy = (filter === 'popular' ? '-upvotes.length' : '-createdAt');
+    };
 
     ctrl.addPostDialog = function() {
         if (!$rootScope.loggedIn) {
@@ -32,12 +27,12 @@ function SideNav($mdSidenav, $rootScope, $mdDialog, $mdMedia) {
             controller: NewPostController,
             controllerAs: 'ctrl'
         });
-    }
+    };
 }
 
-NewPostController.$inject = ['$mdDialog', '$http'];
+NewPostController.$inject = ['$mdDialog', '$http', '$state'];
 
-function NewPostController($mdDialog, $http) {
+function NewPostController($mdDialog, $http, $state) {
     const ctrl = this;
     ctrl.title = '';
     ctrl.image = null;
@@ -48,6 +43,11 @@ function NewPostController($mdDialog, $http) {
     
     ctrl.clearErrors = function() {
         ctrl.err = '';
+    };
+
+    ctrl.setImageSrc = function(src, imgFile) {
+        ctrl.imgSrc = src;
+        ctrl.image = imgFile;
     };
 
     ctrl.removeImage = function() {
@@ -70,14 +70,18 @@ function NewPostController($mdDialog, $http) {
             headers: {'Content-Type': undefined}
         })
         .then(res => {
-            ctrl.success = 'Post added successfully';
+            ctrl.close();
+            $state.go('post', {postId: res.data._id});
         })
         .catch(err => {
-            if (err.data.error.status === 413) {
+            if (err.data && err.data.error && err.data.error.status === 413) {
                 ctrl.err = 'Max. image size should be 15 MB';
             }
-            else {
+            else if (err.data && err.data.error) {
                 ctrl.err = err.data.error.message;
+            }
+            else {
+                console.error(err);
             }
         });
     }

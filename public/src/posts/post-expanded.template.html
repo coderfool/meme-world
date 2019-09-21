@@ -1,8 +1,23 @@
-<div ng-if="ctrl.post" layout="column" flex="75">
+<div ng-if="ctrl.post" layout="column" flex="75" class="relative">
     <div layout="row" layout-align="center">
         <h1 ng-if="ctrl.err" class="md-display-1">{{ctrl.messages.default}}</h1>
         <h1 class="md-headline">{{ctrl.post.title}}</h1>
     </div>
+    <md-menu ng-if="ctrl.owns" md-position-mode="right bottom">
+        <md-button class="md-icon-button top-right" 
+            ng-click="ctrl.showPostMenu($mdMenu, $event)">
+            <i md-menu-origin class="material-icons">more_vert</i>
+        </md-button>
+        <md-menu-content class="md-dense">
+            <md-menu-item>
+                <md-button ng-click="ctrl.showEditDialog()">Edit Title</md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+                <md-button ng-click="ctrl.showRemoveDialog()">Delete</md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
     <div layout="row" layout-align="center">
         <img ng-src="data:image/png;base64,{{ctrl.post.image}}" class="img-responsive">
     </div>
@@ -17,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <form name="commentForm" layout="row" layout-align="center center" flex>
+        <form name="commentForm" enctype="multipart/form-data" layout="row" layout-align="center center" flex>
             <md-input-container class="width-80">
                 <label>Your comment</label>
                 <input type="text" name="comment" ng-model="ctrl.newComment">
@@ -25,7 +40,7 @@
             <label for="image" class="md-button">
                 <i class="material-icons">add_photo_alternate</i>
             </label>
-            <input image-upload controller-as="ctrl" type="file" accept="image/png,image/jpeg" name="image" id="image" class="ng-hide"> 
+            <input image-upload preview-image="ctrl.setImageSrc" type="file" accept="image/png,image/jpeg" name="image" id="image" class="ng-hide"> 
             <span flex></span>
             <md-button type="submit" class="md-raised md-accent" ng-click="ctrl.submitComment(commentForm.$valid)">Comment</md-button>
         </form>
@@ -41,7 +56,9 @@
                 ng-click="ctrl.setFilter('new')">New
             </md-button>
             <md-divider></md-divider>
-            <comment ng-repeat="comment in ctrl.post.comments | orderBy: ctrl.orderComments" data="comment"></comment>
+            <comment ng-repeat="comment in ctrl.post.comments | orderBy: ctrl.orderCommentsBy" 
+                data="comment" index="$index" remove-comment="ctrl.removeComment(index)"
+                update-comment="ctrl.updateComment(index, comment)"></comment>
         </div>
     </div>
 </div>

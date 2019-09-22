@@ -4,6 +4,21 @@
             <span class="md-headline">{{$ctrl.post.title}}</span>
         </md-card-title-text>
     </md-card-title>
+    <md-menu ng-if="$ctrl.owns" md-position-mode="right bottom">
+        <md-button class="md-icon-button top-right" 
+            ng-click="$ctrl.showPostMenu($mdMenu, $event)">
+            <i md-menu-origin class="material-icons">more_vert</i>
+        </md-button>
+        <md-menu-content class="md-dense">
+            <md-menu-item>
+                <md-button ng-click="$ctrl.showEditDialog()">Edit Title</md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+                <md-button ng-click="$ctrl.showRemoveDialog()">Delete</md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
     <a ui-sref="post({postId: $ctrl.post._id})">
         <img ng-src="{{$ctrl.imageSrc}}" class="md-card-image img-responsive" alt="{{$ctrl.post.title}}">
     </a>

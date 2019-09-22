@@ -3,13 +3,14 @@ angular.module('MemeWorld')
     templateUrl: 'src/posts/post.template.html',
     controller: PostController,
     bindings: {
-        post : '=data'
+        post : '=data',
+        removePost: '<'
     }
 });
 
-PostController.$inject = ['$rootScope', '$http', 'PostsService'];
+PostController.$inject = ['$rootScope', '$http', 'PostsService', '$mdDialog', '$mdToast'];
 
-function PostController($rootScope, $http, PostsService) {
+function PostController($rootScope, $http, PostsService, $mdDialog, $mdToast) {
     const ctrl = this;
     
     ctrl.$onInit = function() {
@@ -17,6 +18,7 @@ function PostController($rootScope, $http, PostsService) {
         ctrl.upvoted = isUpvoted();
         ctrl.downvoted = isDownvoted();
         ctrl.post.date = new Date(ctrl.post.createdAt).toDateString();
+        ctrl.owns = ($rootScope.user && ctrl.post.author === $rootScope.user._id);
     }
 
     function isUpvoted() {
@@ -88,4 +90,88 @@ function PostController($rootScope, $http, PostsService) {
             console.error(err);
         });
     }
+
+    ctrl.showPostMenu = function($mdMenu, $event) {
+        $mdMenu.open($event);
+    };
+
+    ctrl.showRemoveDialog = function() {
+        const confirm = $mdDialog.confirm()
+            .title('Are you sure you want to delete this post?')
+            .ariaLabel('Delete post')
+            .ok('Yes')
+            .cancel('No');
+
+        $mdDialog.show(confirm).then(function() {
+            $http.delete(`../posts/${ctrl.post._id}`)
+            .then(function(res) {
+                ctrl.removePost(ctrl.post._id);
+                $mdToast.show(
+                    $mdToast.simple()
+                    .textContent('Post was deleted successfully')
+                    .position('left right')
+                    .hideDelay(3000)
+                    .action('Close')
+                    .actionKey('c')
+                    .highlightAction(true)
+                    .highlightClass('md-accent'))
+                .then(function(res) {
+                    $mdToast.hide();
+                })
+                .catch(angular.noop);
+            })
+            .catch(function(err) {
+                $mdToast.show(
+                    $mdToast.simple()
+                    .textContent('Could not delete post :(')
+                    .position('left right')
+                    .hideDelay(3000)
+                    .action('Close')
+                    .actionKey('c')
+                    .highlightAction(true)
+                    .highlightClass('md-accent'))
+                .then(function(res) {
+                    $mdToast.hide();
+                })
+                .catch(angular.noop);
+                console.error(err);
+            });
+        }, angular.noop);
+    };
+
+    ctrl.showEditDialog = function() {
+        const confirm = $mdDialog.prompt()
+            .title('Edit Title')
+            .placeholder('Title')
+            .ariaLabel('Edit Title')
+            .initialValue(ctrl.post.title)
+            .required(true)
+            .ok('Save')
+            .cancel('Cancel');
+
+        $mdDialog.show(confirm)
+        .then(function(res) {
+            $http.put(`../posts/${ctrl.post._id}`, { title: res })
+            .then(function(res) {
+                ctrl.post = {...ctrl.post, ...res.data};
+            })
+            .catch(function(err) {
+                $mdToast.show(
+                    $mdToast.simple()
+                    .textContent('Could not update post :(')
+                    .position('left right')
+                    .hideDelay(3000)
+                    .action('Close')
+                    .actionKey('c')
+                    .highlightAction(true)
+                    .highlightClass('md-accent'))
+                .then(function(res) {
+                    $mdToast.hide();
+                })
+                .catch(angular.noop);
+                console.error(err);
+            });
+        })
+        .catch(angular.noop);
+    };
 }

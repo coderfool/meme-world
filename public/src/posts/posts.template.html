@@ -1,4 +1,4 @@
 <div layout="column" layout-align="start center">
     <h1 ng-if="$ctrl.err" class="md-title text-center" flex>{{$ctrl.messages.default}}</h1>
-    <post ng-repeat="post in $ctrl.posts | orderBy: $root.orderPostsBy" data="post" layout-margin></post>
+    <post ng-repeat="post in $root.posts | orderBy: $root.orderPostsBy" data="post" remove-post="$ctrl.removePost" layout-margin></post>
 </div>

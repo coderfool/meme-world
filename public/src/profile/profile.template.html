@@ -1,0 +1,74 @@
+<md-dialog flex="80" aria-label="Edit profile" layout-padding>
+    <div layout="row" layout-align="start center">
+        <h1 class="md-headline"><b>Edit Profile</b></h1>
+        <span flex></span>
+        <md-button class="md-icon-button mr-0" aria-label="Close" ng-click="ctrl.close()">
+            <i class="material-icons">close</i>
+        </md-button>
+    </div>
+    <md-divider></md-divider>
+    <md-dialog-content>
+        <form name="updateProfile">
+            <div layout="row" layout-align="start end">
+                <div ng-if="ctrl.imgSrc" class="max-width-50">
+                    <div class="relative">
+                        <img ng-src="{{ctrl.imgSrc}}" class="img-responsive">
+                        <md-button class="md-icon-button white-bg remove-btn top-right" aria-label="Close" ng-click="ctrl.removeImage()">
+                            <i class="material-icons">delete</i>
+                        </md-button>
+                    </div>
+                </div>
+                <i ng-if="!ctrl.imgSrc" class="material-icons font-200" layout-padding>account_circle</i>
+                <div layout="column">
+                    <label for="profilePic" class="md-button">
+                        <i class="material-icons">add_a_photo</i>
+                    </label>
+                    <input image-upload preview-image="ctrl.setImageSrc" type="file" class="ng-hide" accept="image/png,image/jpeg" name="profilePic" id="profilePic">
+                </div>
+            </div>
+            <md-input-container class="mt-30">
+                <label>Username</label>
+                <input type="text" ng-model="ctrl.username" required>
+                <div ng-messages="updateProfile.username.$error"></div>
+            </md-input-container>
+            <md-input-container class="mt-30">
+                <label>Email</label>
+                <input type="email" name="email" ng-model="ctrl.email" class="width-150" required>
+                <div ng-messages="updateProfile.email.$error">
+                    <div ng-message="email">{{ctrl.messages.invalidEmail}}</div>
+                </div>
+            </md-input-container>
+            <div>
+                <h2 class="md-title mb-5">Change Password</h2>
+                <md-divider></md-divider>
+                <md-input-container class="mt-30">
+                    <label>Current Password</label>
+                    <input type="password" ng-model="ctrl.password">
+                </md-input-container>
+                <md-input-container class="mt-30">
+                    <label>New Password</label>
+                    <input type="password" ng-model="ctrl.newPassword">
+                </md-input-container>
+            </div>
+            <div layout="row">
+                <span flex></span>
+                <md-button class="md-accent">Reset</md-button>
+                <md-button type="submit" class="md-raised md-primary">Save</md-button>
+            </form>
+        </div>
+        <h2 class="md-title mb-5">Delete Account</h2>
+        <md-divider></md-divider>
+        <md-button ng-if="!ctrl.delete" class="md-raised md-warn mt-30" ng-click="ctrl.delete=true">Delete</md-button>
+        <form ng-if="ctrl.delete" name="deleteAccount" class="mt-30">
+            <span>This will permanently delete all your data. Enter your password to confirm: </span>
+            <div>
+                <md-input-container>
+                    <label>Password</label>
+                    <input type="password" name="password" required>
+                    <div ng-messages="updateProfile.username.$error"></div>
+                </md-input-container>
+                <md-button type="submit" class="md-raised md-warn">Delete</md-button>
+            </div>
+        </form>
+    </md-dialog-content>
+</md-dialog>

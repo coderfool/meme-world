@@ -100,7 +100,7 @@ function CommentController($rootScope, $http, $mdDialog, $mdMedia) {
                     $mdToast.simple()
                     .textContent('Could not delete comment :(')
                     .position('left right')
-                    .hideDelay(2000)
+                    .hideDelay(3000)
                     .action('Close')
                     .actionKey('c')
                     .highlightAction(true)

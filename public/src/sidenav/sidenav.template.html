@@ -19,6 +19,12 @@
                 ng-click="$ctrl.setFilter('new')">New
             </md-button>
         </md-list-item>
+        <md-list-item ng-if="$root.loggedIn">
+            <md-button 
+                ng-class="{'md-accent': $ctrl.selectedFilter === 'myPosts'}"
+                ng-click="$ctrl.showMyPosts()">My Posts
+            </md-button>
+        </md-list-item>
     </md-list>
     <md-button class="md-raised md-accent" ng-click="$ctrl.addPostDialog()">Add Post</md-button>
 </md-sidenav>

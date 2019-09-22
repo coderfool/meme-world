@@ -6,9 +6,17 @@ angular.module('MemeWorld')
             previewImage: '<'
         },
         link: function(scope, element, attrs) {
+            element.on('click', function(event) {
+                event.target.value = '';
+            });
+
             element.on('change', function(event) {
                 const targetElem = event.target;
+                
                 if (targetElem.files && targetElem.files[0]) {
+                    console.log(targetElem);
+                    console.log(targetElem.value);
+                    
                     const file = targetElem.files[0];
                     const reader = new FileReader();
                     const eventName = 'httpLoading';   
@@ -26,7 +34,3 @@ angular.module('MemeWorld')
         }
     };
 }]);
-
-function ImageUploadController() {
-    const ctrl = this;
-}

@@ -107,7 +107,7 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
                     $mdToast.simple()
                     .textContent('Post was deleted successfully')
                     .position('left right')
-                    .hideDelay(2000)
+                    .hideDelay(3000)
                     .action('Close')
                     .actionKey('c')
                     .highlightAction(true)
@@ -122,7 +122,7 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
                     $mdToast.simple()
                     .textContent('Could not delete post :(')
                     .position('left right')
-                    .hideDelay(2000)
+                    .hideDelay(3000)
                     .action('Close')
                     .actionKey('c')
                     .highlightAction(true)
@@ -157,7 +157,7 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
                     $mdToast.simple()
                     .textContent('Could not update post :(')
                     .position('left right')
-                    .hideDelay(2000)
+                    .hideDelay(3000)
                     .action('Close')
                     .actionKey('c')
                     .highlightAction(true)
@@ -170,5 +170,5 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
             });
         })
         .catch(angular.noop);
-    }
+    };
 }

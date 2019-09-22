@@ -81,7 +81,17 @@ function AppController($mdDialog, $mdMedia, $rootScope, $http) {
 
     ctrl.showUserMenu = function($mdMenu, $event) {
         $mdMenu.open($event);
-    }
+    };
+
+    ctrl.showProfileDialog = function() {
+        $mdDialog.show({
+            templateUrl: 'src/profile/profile.template.html',
+            clickOutsideToClose: true,
+            fullscreen: !$mdMedia('gt-sm'),
+            controller: ProfileController,
+            controllerAs: 'ctrl'
+        });
+    };
 
     ctrl.logOut = function() {
         localStorage.removeItem('jwt');

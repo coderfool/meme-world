@@ -8,11 +8,18 @@ function PostsService ($http, $q) {
     
     service.getPosts = function() {
         const cancel = $q.defer();
-        return $http({
+        return  $http({
             method: 'GET',
             url: '../posts',
             timeout: cancel.promise,
             cancel: cancel
+        })
+        .then(res => {
+            service.allPosts = res.data;
+            return res.data;
+        })
+        .catch(err => {
+            return Promise.reject(err);
         });
     };
 

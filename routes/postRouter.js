@@ -169,7 +169,6 @@ router.route('/:postId/comments')
             if (user.image) {
                 comment.profilePic = user.image
             }
-            console.log(comment);
             
             Comments.create(comment)
             .then(comment => {

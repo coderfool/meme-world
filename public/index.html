@@ -24,13 +24,14 @@
                 <div ng-if="loggedIn" layout="row" flex="15">
                     <md-menu md-position-mode="target-right bottom target" md-offset="-5 5">
                         <md-button layout="row" layout-align="start center" ng-click="ctrl.showUserMenu($mdMenu, $event)">
-                            <img flex="35" class="avatar" layout-padding ng-if="user.image" ng-src="data:image/png;base64,{{user.image}}">
+                            <img ng-if="user.image" flex="35" ng-src="data:image/png;base64,{{user.image}}" class="avatar" layout-padding>
+                            <i ng-if="!user.image" class="material-icons font-36" layout-padding>account_circle</i>
                             {{user.username}}
                             <i md-menu-origin class="material-icons">keyboard_arrow_down</i>
                         </md-button>
                         <md-menu-content class="md-dense">
                             <md-menu-item>
-                                <md-button>Profile</md-button>
+                                <md-button ng-click="ctrl.showProfileDialog()">Edit Profile</md-button>
                             </md-menu-item>
                             <md-menu-divider></md-menu-divider>
                             <md-menu-item>
@@ -60,6 +61,6 @@
         <script src="src/registration/registration.controller.js"></script>
         <script src="src/spinner/spinner.component.js"></script>
         <script src="src/directives/image-upload.directive.js"></script>
-        <script src="src/scripts.js"></script>
+        <script src="src/profile/profile.controller.js"></script>
     </body>
 </html>

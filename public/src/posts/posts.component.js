@@ -4,36 +4,38 @@ angular.module('MemeWorld')
     controller: PostsController,
 });
 
-PostsController.$inject = ['PostsService', '$rootScope', '$filter'];
+PostsController.$inject = ['PostsService', '$rootScope'];
 
-function PostsController(PostsService, $rootScope, $filter) {
+function PostsController(PostsService, $rootScope) {
     const ctrl = this;
     $rootScope.orderPostsBy = '-upvotes.length';
+    $rootScope.posts = [];
     ctrl.messages = {
         default: 'Something went wrong. Please check your internet connection and try again.'
     };
-    ctrl.posts = [];
-    PostsService.getPosts()
-    .then(res => {
-        ctrl.posts = res.data;
-    })
-    .catch(err => {
-        console.error(err);
-        if (err.xhrStatus !== 'abort') {
-            ctrl.err = true;
-        }
-    });
 
-    // $rootScope.sortPosts = function(filter) {
-    //     if (filter === 'popular') {
-    //         ctrl.posts = $filter('orderBy')(ctrl.posts, function(post) {
-    //             return post.upvotes.length;
-    //         }, true);
-    //     }
-    //     else if (filter === 'new') {
-    //         ctrl.posts = $filter('orderBy')(ctrl.posts, function(post) {
-    //             return new Date(post.createdAt).getTime();
-    //         }, true);
-    //     }
-    // };
+    if (PostsService.allPosts) {
+        $rootScope.posts = PostsService.allPosts;
+    }
+    else {
+        PostsService.getPosts()
+        .then(res => {
+            $rootScope.posts = res;
+        })
+        .catch(err => {
+            if (err.xhrStatus !== 'abort') {
+                ctrl.err = true;
+                console.error(err);
+            }
+        });
+    }
+
+    ctrl.removePost = function(postId) {
+        for (let i = 0; i < $rootScope.posts.length; i++) {
+            if ($rootScope.posts[i]._id === postId) {
+                $rootScope.posts.splice(i, 1);
+                break;
+            }
+        }
+    };
 }

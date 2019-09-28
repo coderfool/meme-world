@@ -19,7 +19,7 @@
                 <md-button ui-sref="home" ui-sref-active="md-primary white-bg">Home</md-button>
                 <div ng-if="!loggedIn">
                     <md-button class="md-raised md-accent" ng-click="loginPrompt()">Log In</md-button>
-                    <md-button class="md-raised" ui-sref="registration">Sign Up</md-button>
+                    <md-button class="md-raised" ng-click="signupPrompt()">Sign Up</md-button>
                 </div>
                 <div ng-if="loggedIn" layout="row" flex="15">
                     <md-menu md-position-mode="target-right bottom target" md-offset="-5 5">

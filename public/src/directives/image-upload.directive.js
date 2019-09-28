@@ -13,11 +13,13 @@ angular.module('MemeWorld')
             element.on('change', function(event) {
                 const targetElem = event.target;
                 
-                if (targetElem.files && targetElem.files[0]) {
-                    console.log(targetElem);
-                    console.log(targetElem.value);
-                    
+                if (targetElem.files && targetElem.files[0]) {                    
                     const file = targetElem.files[0];
+                    const regex = /\.(jpg|jpeg|png|gif)$/i;
+                    if (!regex.test(file.name)) {
+                        return;
+                    }
+                    
                     const reader = new FileReader();
                     const eventName = 'httpLoading';   
                     reader.onload = function(event) {        

@@ -1,39 +1,50 @@
-<div layout="column" layout-align="start center" flex="35">
-    <h1>Sign Up</h1>
-    <form name="registration" class="width-80" enctype="multipart/form-data" layout="column" layout-align="start center">
-        <md-input-container class="width-80">
-            <label>Email</label>
-            <input type="email" name="email" ng-model="ctrl.email" ng-focus="ctrl.clearErrors()" required>
-            <div ng-messages="registration.email.$error">
-                <div ng-message="email">{{ctrl.messages.invalidEmail}}</div>
+<md-dialog layout="column" layout-padding flex="40">
+    <div layout="row" layout-align="start center">
+        <h1 class="md-headline">Sign Up</h1>
+        <span flex></span>
+        <md-button class="md-icon-button mr-0" aria-label="Close" ng-click="ctrl.close()">
+            <i class="material-icons">close</i>
+        </md-button>
+    </div>
+    <md-dialog-content>
+        <form name="registration" enctype="multipart/form-data" layout="column" layout-align="start center">
+            <md-input-container class="width-60">
+                <label>Email</label>
+                <input type="email" name="email" ng-model="ctrl.email" ng-focus="ctrl.clearErrors()" required>
+                <div ng-messages="registration.email.$error">
+                    <div ng-message="email">{{ctrl.messages.invalidEmail}}</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="width-60">
+                <label>Username</label>
+                <input type="text" name="username" ng-model="ctrl.username" ng-focus="ctrl.clearErrors()" required>
+                <div ng-messages="registration.username.$error"></div>
+            </md-input-container>
+            <md-input-container class="width-60">
+                <label>Password</label>
+                <input type="password" name="password" ng-model="ctrl.password" ng-focus="ctrl.clearErrors()" required>
+                <div ng-messages="registration.password.$error"></div>
+            </md-input-container>
+            <div ng-if="!ctrl.imgSrc" layout-margin>
+                <label for="registrationImage" layout="row" layout-align="start center" layout-padding class="md-button">
+                    Add Profile Picture
+                    <i class="material-icons">add_a_photo</i>
+                </label>
+                <input image-upload preview-image="ctrl.setImageSrc" type="file" class="ng-hide" accept="image/png,image/jpeg" name="registrationImage" id="registrationImage">
             </div>
-        </md-input-container>
-        <md-input-container class="width-80">
-            <label>Username</label>
-            <input type="text" name="username" ng-model="ctrl.username" ng-focus="ctrl.clearErrors()" required>
-            <div ng-messages="registration.username.$error"></div>
-        </md-input-container>
-        <md-input-container class="width-80">
-            <label>Password</label>
-            <input type="password" name="password" ng-model="ctrl.password" ng-focus="ctrl.clearErrors()" required>
-            <div ng-messages="registration.password.$error"></div>
-        </md-input-container>
-        <div ng-if="!ctrl.imgSrc" layout-margin>
-            <label for="image" layout="row" layout-align="start center" layout-padding class="md-button">
-                Add Profile Picture
-                <i class="material-icons">add_a_photo</i>
-            </label>
-            <input image-upload preview-image="ctrl.setImageSrc" type="file" class="ng-hide" accept="image/png,image/jpeg" name="image" id="image">
-        </div>
-        <div ng-if="ctrl.imgSrc">
-            <div class="relative">
-                <img ng-src="{{ctrl.imgSrc}}" class="img-responsive">
-                <md-button class="md-icon-button white-bg remove-btn top-right" aria-label="Close" ng-click="ctrl.removeImage()">
-                    <i class="material-icons">delete</i>
-                </md-button>
+            <div ng-if="ctrl.imgSrc">
+                <div class="relative">
+                    <img ng-src="{{ctrl.imgSrc}}" class="img-responsive">
+                    <md-button class="md-icon-button white-bg remove-btn top-right" aria-label="Close" ng-click="ctrl.removeImage()">
+                        <i class="material-icons">delete</i>
+                    </md-button>
+                </div>
             </div>
+            <span ng-if="ctrl.err" md-colors="{color: 'red'}" class="md-body-1 text-center" layout-padding>{{ctrl.err}}</span>
+            <md-button layout-margin type="submit" class="md-raised md-accent" ng-click="ctrl.submit(registration.$valid)">Sign Up</md-button>
+        </form>
+        <div layout="row" layout-align="center">
+            <span>Already have an account?<md-button class="md-primary" ng-click="$root.loginPrompt();">Log In</md-button></span>
         </div>
-        <span ng-if="ctrl.err" md-colors="{color: 'red'}" class="md-body-1 text-center" layout-padding>{{ctrl.err}}</span>
-        <md-button layout-margin type="submit" class="md-raised md-accent" ng-click="ctrl.submit(registration.$valid)">Sign Up</md-button>
-    </form>
-</div>
+    </md-dialog-content>
+</md-dialog>

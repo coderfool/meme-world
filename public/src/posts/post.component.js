@@ -154,6 +154,19 @@ function PostController($rootScope, $http, PostsService, $mdDialog, $mdToast) {
             $http.put(`../posts/${ctrl.post._id}`, { title: res })
             .then(function(res) {
                 ctrl.post = {...ctrl.post, ...res.data};
+                $mdToast.show(
+                    $mdToast.simple()
+                    .textContent('Title updated successfully')
+                    .position('left right')
+                    .hideDelay(3000)
+                    .action('Close')
+                    .actionKey('c')
+                    .highlightAction(true)
+                    .highlightClass('md-accent'))
+                .then(function(res) {
+                    $mdToast.hide();
+                })
+                .catch(angular.noop);
             })
             .catch(function(err) {
                 $mdToast.show(

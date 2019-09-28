@@ -146,7 +146,7 @@ function EditCommentController($mdDialog, PostsService, comment) {
     };
 
     ctrl.messages = {
-        imageTooLarge: 'Max. image size should be 15 MB',
+        imageTooLarge: 'Max. image size should be 8 MB',
         default: 'Something went wrong. Please check your internet connection and try again.'
     };
 
@@ -168,11 +168,11 @@ function EditCommentController($mdDialog, PostsService, comment) {
 
     ctrl.setImageSrc = function(src, imgFile) {
         ctrl.imgSrc = src;
-        ctrl.comment.image = src.split(',')[1];
+        ctrl.comment.image = imgFile;
     };
 
     ctrl.removeImage = function() {
-        ctrl.comment.image = '';
+        ctrl.comment.image = null;
         ctrl.imgSrc = '';
         ctrl.clearErrors();
     };
@@ -192,7 +192,7 @@ function EditCommentController($mdDialog, PostsService, comment) {
         })
         .catch(err => {
             if (err.data && err.data.error && err.data.error.status === 413) {
-                ctrl.err = 'Max. image size should be 15 MB';
+                ctrl.err = 'Max. image size should be 8 MB';
             }
             else if (err.data && err.data.error) {
                 ctrl.err = err.data.error.message;

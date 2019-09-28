@@ -21,11 +21,6 @@ function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProv
         url: '/',
         templateUrl: '/src/home/home.template.html'
     })
-    .state('registration', {
-        url: '/registration',
-        templateUrl: 'src/registration/registration.template.html',
-        controller: 'RegistrationController as ctrl'
-    })
     .state('post', {
         url: '/posts/{postId}',
         templateUrl: 'src/posts/post-expanded.template.html',
@@ -77,7 +72,17 @@ function AppController($mdDialog, $mdMedia, $rootScope, $http) {
             controller: LoginController,
             controllerAs: 'ctrl'
         });
-    }
+    };
+
+    $rootScope.signupPrompt = function() {
+        $mdDialog.show({
+            templateUrl: 'src/registration/registration.template.html',
+            clickOutsideToClose: true,
+            fullscreen: !$mdMedia('gt-sm'),
+            controller: RegistrationController,
+            controllerAs: 'ctrl'
+        });
+    };
 
     ctrl.showUserMenu = function($mdMenu, $event) {
         $mdMenu.open($event);

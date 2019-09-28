@@ -66,7 +66,16 @@ function PostsService ($http, $q) {
         if (comment.text === '' && !comment.image) {
             return Promise.reject('Comment cannot be empty');
         }
-        
-        return $http.put(`../posts/comments/${comment.id}`, comment);
+        const formData = new FormData();
+        if (comment.text) {
+            formData.append('text', comment.text);
+        }
+        if (comment.image) {
+            formData.append('image', comment.image);
+        }
+        return $http.put(`../posts/comments/${comment.id}`, formData, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+        });
     };
 }

@@ -1,9 +1,9 @@
 angular.module('MemeWorld')
 .controller('RegistrationController', RegistrationController);
 
-RegistrationController.$inject = ['$http', '$mdToast'];
+RegistrationController.$inject = ['$http', '$mdToast', '$mdDialog'];
 
-function RegistrationController($http, $mdToast) {
+function RegistrationController($http, $mdToast, $mdDialog) {
     const ctrl = this;
     ctrl.username = '';
     ctrl.email = '';
@@ -13,8 +13,12 @@ function RegistrationController($http, $mdToast) {
 
     ctrl.messages = {
         invalidEmail: 'Please enter a valid email',
-        imageTooLarge: 'Max. image size should be 15 MB'
-    }
+        imageTooLarge: 'Max. image size should be 8 MB'
+    };
+
+    ctrl.close = function() {
+        $mdDialog.hide();
+    };
 
     ctrl.setImageSrc = function(src, imgFile) {
         ctrl.imgSrc = src;
@@ -25,11 +29,11 @@ function RegistrationController($http, $mdToast) {
         ctrl.image = null;
         ctrl.imgSrc = '';
         ctrl.clearErrors();
-    }
+    };
 
     ctrl.clearErrors = function() {
         ctrl.err = '';
-    }
+    };
     
     ctrl.submit = function(valid) {
         if (!valid) {
@@ -65,10 +69,11 @@ function RegistrationController($http, $mdToast) {
                 $mdToast.hide();
             })
             .catch(angular.noop);
+            ctrl.close();
         })
         .catch(err => {
             if (err.data && err.data.error && err.data.error.status === 413) {
-                ctrl.err = 'Max. image size should be 15 MB';
+                ctrl.err = 'Max. image size should be 8 MB';
             }
             else if (err.data && err.data.error) {
                 ctrl.err = err.data.error.message;

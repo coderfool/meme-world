@@ -8,7 +8,7 @@
     </div>
     <md-divider></md-divider>
     <md-dialog-content>
-        <form name="updateProfile">
+        <form name="updateProfile" enctype="multipart/form-data">
             <div layout="row" layout-align="start end">
                 <div ng-if="ctrl.imgSrc" class="max-width-50">
                     <div class="relative">
@@ -28,12 +28,12 @@
             </div>
             <md-input-container class="mt-30">
                 <label>Username</label>
-                <input type="text" ng-model="ctrl.username" required>
+                <input type="text" ng-model="ctrl.username" ng-focus="ctrl.clearErrors()" required>
                 <div ng-messages="updateProfile.username.$error"></div>
             </md-input-container>
             <md-input-container class="mt-30">
                 <label>Email</label>
-                <input type="email" name="email" ng-model="ctrl.email" class="width-150" required>
+                <input type="email" name="email" ng-model="ctrl.email" ng-focus="ctrl.clearErrors()" class="width-150" required>
                 <div ng-messages="updateProfile.email.$error">
                     <div ng-message="email">{{ctrl.messages.invalidEmail}}</div>
                 </div>
@@ -43,31 +43,41 @@
                 <md-divider></md-divider>
                 <md-input-container class="mt-30">
                     <label>Current Password</label>
-                    <input type="password" ng-model="ctrl.password">
+                    <input type="password" ng-model="ctrl.password" ng-focus="ctrl.clearErrors()">
                 </md-input-container>
                 <md-input-container class="mt-30">
                     <label>New Password</label>
-                    <input type="password" ng-model="ctrl.newPassword">
+                    <input type="password" ng-model="ctrl.newPassword" ng-focus="ctrl.clearErrors()">
                 </md-input-container>
             </div>
-            <div layout="row">
-                <span flex></span>
-                <md-button class="md-accent">Reset</md-button>
-                <md-button type="submit" class="md-raised md-primary">Save</md-button>
+            <div layout="row" layout-align="start center">
+                <span flex>
+                    <div ng-messages="ctrl.err" role="alert" class="md-body-1 text-center">
+                        <span ng-message="usernameErr" md-colors="{color: 'red'}">{{ctrl.messages.usernameErr}}</span>
+                        <span ng-message="emailErr" md-colors="{color: 'red'}">{{ctrl.messages.emailErr}}</span>
+                        <span ng-message="passwordErr" md-colors="{color: 'red'}">{{ctrl.messages.incorrectPassword}}</span>
+                        <span ng-message="newPasswordErr" md-colors="{color: 'red'}">{{ctrl.messages.newPassword}}</span>
+                        <span ng-message="imageErr" md-colors="{color: 'red'}">{{ctrl.messages.imageTooLarge}}</span>
+                        <span ng-message="other" md-colors="{color: 'red'}">{{ctrl.messages.other}}</span>
+                    </div>
+                </span>
+                <md-button class="md-accent" ng-click="ctrl.initializeForm()">Reset</md-button>
+                <md-button type="submit" class="md-raised md-primary" ng-click="ctrl.submit(updateProfile.$valid)">Save</md-button>
             </form>
         </div>
         <h2 class="md-title mb-5">Delete Account</h2>
         <md-divider></md-divider>
         <md-button ng-if="!ctrl.delete" class="md-raised md-warn mt-30" ng-click="ctrl.delete=true">Delete</md-button>
         <form ng-if="ctrl.delete" name="deleteAccount" class="mt-30">
-            <span>This will permanently delete all your data. Enter your password to confirm: </span>
+            <span>This will permanently delete all your data, including posts and comments. Enter your password to confirm: </span>
             <div>
                 <md-input-container>
                     <label>Password</label>
-                    <input type="password" name="password" required>
-                    <div ng-messages="updateProfile.username.$error"></div>
+                    <input type="password" name="password" ng-model="ctrl.passwordConfirm" ng-focus="ctrl.clearErrors()" required>
+                    <div ng-messages="deleteAccount.password.$error"></div>
                 </md-input-container>
-                <md-button type="submit" class="md-raised md-warn">Delete</md-button>
+                <md-button type="submit" class="md-raised md-warn" ng-click="ctrl.deleteAccount()">Delete</md-button>
+                <span ng-if="ctrl.err.deleteErr" md-colors="{color: 'red'}">{{ctrl.messages.incorrectPassword}}</span>
             </div>
         </form>
     </md-dialog-content>

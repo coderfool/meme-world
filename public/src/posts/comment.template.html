@@ -1,22 +1,8 @@
 <div layout="row" layout-padding class="relative">
-    <md-menu ng-if="$ctrl.owns" md-position-mode="right bottom">
-        <md-button class="md-icon-button top-right" 
-            ng-click="$ctrl.showCommentMenu($mdMenu, $event)">
-            <i md-menu-origin class="material-icons">more_vert</i>
-        </md-button>
-        <md-menu-content class="md-dense">
-            <md-menu-item>
-                <md-button ng-click="$ctrl.showEditDialog()">Edit</md-button>
-            </md-menu-item>
-            <md-menu-divider></md-menu-divider>
-            <md-menu-item>
-                <md-button ng-click="$ctrl.showRemoveDialog()">Delete</md-button>
-            </md-menu-item>
-        </md-menu-content>
-    </md-menu>
     <span class="bottom-right font-12">{{$ctrl.comment.date}}</span>
     <div flex="10">
         <img flex="80" ng-if="$ctrl.comment.profilePic" class="avatar" ng-src="data:image/png;base64,{{$ctrl.comment.profilePic}}">
+        <i ng-if="!$ctrl.comment.profilePic" class="material-icons font-50" layout-padding>account_circle</i>
     </div>
     <div layout="column">
         <span class="md-subhead"><b>{{$ctrl.comment.username}}</b></span>
@@ -37,5 +23,20 @@
             <small>{{$ctrl.comment.downvotes.length}}</small>
         </div>
     </div>
+    <md-menu ng-if="$ctrl.owns" md-position-mode="right bottom">
+        <md-button class="md-icon-button top-right" 
+            ng-click="$ctrl.showCommentMenu($mdMenu, $event)">
+            <i md-menu-origin class="material-icons">more_vert</i>
+        </md-button>
+        <md-menu-content class="md-dense">
+            <md-menu-item>
+                <md-button ng-click="$ctrl.showEditDialog()">Edit</md-button>
+            </md-menu-item>
+            <md-menu-divider></md-menu-divider>
+            <md-menu-item>
+                <md-button ng-click="$ctrl.showRemoveDialog()">Delete</md-button>
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
 </div>
 <md-divider></md-divider>

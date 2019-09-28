@@ -10,7 +10,7 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
     ctrl.orderCommentsBy = '-upvotes.length';
     ctrl.messages = {
         commentsEmpty: 'No comments yet. Be the first one to comment.',
-        imageTooLarge: 'Max. image size should be 15 MB',
+        imageTooLarge: 'Max. image size should be 8 MB',
         default: 'Something went wrong. Please check your internet connection and try again.'
     };
     
@@ -59,7 +59,7 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
         })
         .catch(err => {
             if (err.data && err.data.error && err.data.error.status === 413) {
-                ctrl.err = 'Max. image size should be 15 MB';
+                ctrl.err = 'Max. image size should be 8 MB';
             }
             else if (err.data && err.data.error) {
                 ctrl.err = err.data.error.message;
@@ -151,6 +151,19 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
             $http.put(`../../posts/${postId}`, { title: res })
             .then(function(res) {
                 ctrl.post = {...ctrl.post, ...res.data};
+                $mdToast.show(
+                    $mdToast.simple()
+                    .textContent('Title updated successfully')
+                    .position('left right')
+                    .hideDelay(3000)
+                    .action('Close')
+                    .actionKey('c')
+                    .highlightAction(true)
+                    .highlightClass('md-accent'))
+                .then(function(res) {
+                    $mdToast.hide();
+                })
+                .catch(angular.noop);
             })
             .catch(function(err) {
                 $mdToast.show(

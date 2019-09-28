@@ -3,18 +3,20 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const Users = require('../models/user');
+const Posts = require('../models/post');
+const Comments = require('../models/comment');
 const authenticate = require('../authenticate');
 const passwordReset = require('../password-reset');
 
 const router = express.Router();
 
-router.use(bodyParser.json());
+router.use(bodyParser.json({ limit: '20mb' }));
 
 const storage = multer.memoryStorage();
 
 const upload = multer({
     storage: storage,
-    limits: {fileSize: 15 * 1024 * 1024},
+    limits: {fileSize: 8 * 1024 * 1024},
     fileFilter: (req, file, cb) => {
         const regex = /\.(jpg|jpeg|png)$/i;
         if (regex.test(file.originalname)) {
@@ -55,11 +57,9 @@ router.route('/:userId')
             err.status = 404;
             return next(err);
         }
-        const update = {};
-        if (req.file) {
-            update.image = req.file.buffer;
-        }
-        Users.findByIdAndUpdate(req.user._id, {$set: update}, {new: true})
+        req.body.image = req.file ? req.file.buffer.toString('base64') : ''; 
+        
+        Users.findByIdAndUpdate(req.user._id, {$set: req.body}, {new: true})
         .then(user => {
             if (req.body.oldPassword && req.body.newPassword) {
                 user.changePassword(req.body.oldPassword, req.body.newPassword)
@@ -76,7 +76,14 @@ router.route('/:userId')
                 res.json(user); 
             }
         })
-        .catch(err => next(err));
+        .catch(err => {
+            if (err.code === 11000) {
+                const field = err.errmsg.indexOf('username') !== -1 ? 'Username' : 'Email'; 
+                err = new Error(`${field} is taken`);
+                err.status = 422;
+            }
+            next(err);
+        });
     })
     .catch(err => next(err));    
 })
@@ -89,7 +96,15 @@ router.route('/:userId')
     }
     Users.findByIdAndDelete(req.user._id)
     .then(resp => {
-        res.status(200).end();
+        Posts.deleteMany({author: req.user._id})
+        .then(resp => {
+            Comments.deleteMany({author: req.user._id})
+            .then(resp => {
+                res.status(200).end();
+            })
+            .catch(err => next(err));
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 });

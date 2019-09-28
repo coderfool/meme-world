@@ -110,6 +110,11 @@ router.route('/:postId')
 .delete(authenticate.isLoggedIn, (req, res, next) => {
     Posts.findById(req.params.postId)
     .then(post => {
+        if (!post) {
+            const err = new Error('Post not found');
+            err.status = 404;
+            return next(err);
+        }
         if (String(req.user._id) !== post.author) {
             const err = new Error('Forbidden');
             err.status = 403;
@@ -117,7 +122,11 @@ router.route('/:postId')
         }
         Posts.findByIdAndDelete(req.params.postId)
         .then(resp => {
-            res.status(200).end();
+            Comments.deleteMany({postId: req.params.postId})
+            .then(resp => {
+                res.status(200).end();
+            })
+            .catch(err => next(err));
         })
         .catch(err => next(err));
     })
@@ -184,7 +193,7 @@ router.route('/:postId/comments')
 });
 
 router.route('/comments/:commentId')
-.put(authenticate.isLoggedIn, (req, res, next) => {
+.put(authenticate.isLoggedIn, upload.single('image'), (req, res, next) => {
     Comments.findById(req.params.commentId)
     .then(comment => {
         if (!comment) {
@@ -197,6 +206,7 @@ router.route('/comments/:commentId')
             err.status = 403;
             return next(err);
         }
+        req.body.image = req.file ? req.file.buffer.toString('base64') : ''; 
         Comments.findByIdAndUpdate(req.params.commentId, {
             $set: req.body
         }, {new: true})

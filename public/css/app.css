@@ -53,6 +53,10 @@
     height: 100% !important;
 }
 
+.width-60 {
+    width: 60% !important;
+}
+
 .width-80 {
     width: 80% !important;
 }
@@ -85,6 +89,10 @@
     font-size: 36px !important;
 }
 
+.font-50 {
+    font-size: 50px !important;
+}
+
 .font-200 {
     font-size: 200px !important;
 }
@@ -105,4 +113,8 @@ html {
 
 .mt-30 {
     margin-top: 30px !important;
+}
+
+.underlined {
+    text-decoration-line: underline;
 }

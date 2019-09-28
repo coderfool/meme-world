@@ -94,6 +94,9 @@ function NewPostController($mdDialog, $http, $state, PostsService) {
             headers: {'Content-Type': undefined}
         })
         .then(res => {
+            if (PostsService.allPosts) {
+                PostsService.allPosts.push(res.data);
+            }
             ctrl.close();
             $state.go('post', {postId: res.data._id});
         })

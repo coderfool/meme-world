@@ -1,4 +1,4 @@
-<md-dialog layout="column" layout-padding>
+<md-dialog layout="column" layout-padding flex="30">
     <div layout="row" layout-align="start center">
         <h1 class="md-headline">Login</h1>
         <span flex></span>
@@ -7,25 +7,39 @@
         </md-button>
     </div>
     <md-dialog-content layout="column" layout-align="start center">
-        <form name="login" layout="column" layout-align="start center">
-            <md-input-container>
+        <form name="login" class="full-width" layout="column" layout-align="start center">
+            <md-input-container class="width-60">
                 <label>Username</label>
-                <input type="text" name="username" ng-model="ctrl.username" ng-focus="ctrl.clearErrors()" required>
+                <input type="text" name="username" ng-model="ctrl.username" ng-focus="ctrl.clearMessages()" required>
                 <div ng-messages="login.username.$error"></div>
             </md-input-container>
-            <md-input-container>
+            <md-input-container class="width-60">
                 <label>Password</label>
-                <input type="password" name="password" ng-model="ctrl.password" ng-focus="ctrl.clearErrors()" required>
+                <input type="password" name="password" ng-model="ctrl.password" ng-focus="ctrl.clearMessages()" required>
                 <div ng-messages="login.password.$error"></div>
             </md-input-container>
             <div ng-messages="ctrl.err" role="alert" class="md-body-1 text-center">
                 <span ng-message="unauthorized" md-colors="{color: 'red'}">{{ctrl.messages.unauthorized}}</span>
-                <span ng-message="invalidUsername" md-colors="{color: 'red'}">{{ctrl.messages.invalidUsername}}</span>
-                <span ng-message="passwordReset" md-colors="{color: 'green'}">{{ctrl.messages.passwordReset}}</span>
+            </div>
+            <md-button type="submit" class="md-raised md-accent" ng-click="ctrl.submit(login.$valid)">Log In</md-button>
+        </form>
+        <md-button ng-if="!ctrl.forgot" ng-click="ctrl.showForgotPassword()">Forgot password?</md-button>
+        <form ng-if="ctrl.forgot" name="forgotPassword" class="full-width" layout="column" layout-align="start center">
+            <span layout-margin>Please enter your registered email:</span>
+            <md-input-container class="width-80">
+                <label>Email</label>
+                <input type="email" name="email" ng-model="ctrl.email" ng-focus="ctrl.clearMessages()" required>
+                <div ng-messages="forgotPassword.email.$error">
+                    <div ng-message="email">{{ctrl.messages.invalidEmail}}</div>
+                </div>
+            </md-input-container>
+            <div ng-messages="ctrl.err" role="alert" class="md-body-1 text-center">
+                <span ng-message="invalidEmail" md-colors="{color: 'red'}">{{ctrl.messages.invalidEmail}}</span>
+                <span ng-message="other" md-colors="{color: 'red'}">{{ctrl.messages.other}}</span>
                 <span ng-message="default" md-colors="{color: 'red'}">{{ctrl.messages.default}}</span>
             </div>
-            <md-button ng-click="ctrl.resetPassword()">Forgot password</md-button>
-            <md-button type="submit" class="md-raised md-accent" ng-click="ctrl.submit(login.$valid)">Log In</md-button>
+            <span ng-if="ctrl.passwordReset" class="md-body-1 text-center" md-colors="{color: 'green'}">{{ctrl.messages.passwordReset}}</span>
+            <md-button type="submit" class="md-raised md-primary" ng-click="ctrl.resetPassword(forgotPassword.$valid)">Reset</md-button>
         </form>
         <span>Don't have an account?<md-button class="md-primary" ng-click="$root.signupPrompt();">Sign Up</md-button></span>
     </md-dialog-content>

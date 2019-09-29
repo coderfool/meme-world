@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const path = require('path');
+const hbs = require('express-handlebars');
 const config = require('./config');
 const userRouter = require('./routes/userRouter');
 const postRouter = require('./routes/postRouter');
@@ -22,10 +23,16 @@ mongoose.connect(config.mongoUrl, {
 })
 .catch(err => console.error(err));
 
-app.use(express.static(path.join(appRoot, 'public')));
+app.set('views', appRoot + '/views');
+app.set('view engine', 'handlebars');
+app.engine('handlebars', hbs({
+    extname: 'handlebars'
+}));
+
 app.use(passport.initialize());
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
+app.use(express.static(path.join(appRoot, 'public')));
 
 // redirect to home if route doesn't exist
 app.use((req, res, next) => {

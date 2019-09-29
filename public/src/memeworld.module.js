@@ -38,9 +38,9 @@ function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProv
     $httpProvider.interceptors.push('loadingHttpInterceptor');
 }
 
-AppController.$inject = ['$mdDialog', '$mdMedia', '$rootScope', '$http'];
+AppController.$inject = ['$mdDialog', '$mdMedia', '$rootScope', '$http', '$scope'];
 
-function AppController($mdDialog, $mdMedia, $rootScope, $http) {
+function AppController($mdDialog, $mdMedia, $rootScope, $http, $scope) {
     const ctrl = this;
     const jwt = localStorage.getItem('jwt');
     if (jwt === null) {
@@ -60,8 +60,15 @@ function AppController($mdDialog, $mdMedia, $rootScope, $http) {
             }
         })
         .catch(err => {
-            console.error(err);
-        })
+            if (err.data.error && err.data.error.message === 'jwt expired') {
+                $rootScope.loggedIn = false;
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('user');
+            }
+            else {
+                console.error(err);
+            }
+        });
     }
     
     $rootScope.loginPrompt = function() {
@@ -119,38 +126,51 @@ function LoginController($mdDialog, $http, $rootScope) {
     const ctrl = this;
     ctrl.username = '';
     ctrl.password = '';
+    ctrl.email = '';
     ctrl.err = {};
     ctrl.messages = {
         unauthorized: 'Invalid username or password',
-        invalidUsername: 'Please enter your correct username',
-        passwordReset: 'Your new password has been sent to your registered email ID',
+        invalidEmail: 'Please enter your correct registered email',
+        passwordReset: 'An email has been sent to you with further instructions',
         default: 'Something went wrong. Please check your internet connection and try again.'
     }
 
     ctrl.close = function() {
         $mdDialog.hide();
-    }
+    };
     
-    ctrl.clearErrors = function() {
+    ctrl.clearMessages = function() {
         ctrl.err = {};
-    }
+        ctrl.passwordReset = false;
+    };
 
-    ctrl.resetPassword = function() {
-        ctrl.clearErrors();
-        if (!ctrl.username || ctrl.username.trim() === '') {
-            ctrl.err.invalidUsername = true;
+    ctrl.showForgotPassword = function() {
+        ctrl.forgot = true;
+    };
+
+    ctrl.resetPassword = function(valid) {
+        ctrl.clearMessages();
+        ctrl.passwordReset = false;
+        if (!valid) {
             return;
         }
-        $http.get(`../users/${ctrl.username}/resetPassword`)
+        $http.post(`../users/forgotPassword`, {
+            email: ctrl.email
+        })
         .then(res => {
-            ctrl.err.passwordReset = true;
+            ctrl.passwordReset = true;
         })
         .catch(err => {
-            if (err.data && err.data.error.status === 404) {
-                ctrl.err.invalidUsername = true;
+            if (err.data && err.data.error && err.data.error.status === 404) {
+                ctrl.err.invalidEmail = true;
+            }
+            else if (err.data && err.data.error) {
+                ctrl.err.other = true;
+                ctrl.messages.other = err.data.error.message;
             }
             else {
                 ctrl.err.default = true;
+                console.error(err);
             }
         });
     }

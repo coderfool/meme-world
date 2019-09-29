@@ -8,6 +8,8 @@
 
 .spinner {
     position: fixed;
+    width: 100vw;
+    height: 100vh;
     left: 50%;
     top: 50%;
     z-index: 100;

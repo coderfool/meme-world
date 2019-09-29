@@ -15,7 +15,7 @@
             </md-input-container>
             <div ng-if="!ctrl.imgSrc" layout="row" layout-align="center">
                 <label for="postImage" class="md-button md-raised md-accent">Browse</label>
-                <input image-upload preview-image="ctrl.setImageSrc" class="ng-hide" type="file" accept="image/png,image/jpeg" name="postImage" id="postImage" required>
+                <input image-upload preview-image="ctrl.setImageSrc" class="ng-hide" type="file" accept="image/png,image/jpeg,image/gif" name="postImage" id="postImage" required>
             </div> 
             <div ng-if="ctrl.imgSrc" layout="row" layout-align="center">
                 <div class="relative">

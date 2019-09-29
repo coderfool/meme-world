@@ -1,5 +1,4 @@
 angular.module('MemeWorld')
-.factory('loadingHttpInterceptor', loadingHttpInterceptor)
 .component('spinner', {
     template: '<md-progress-circular md-mode="indeterminate" ng-if="$ctrl.show"></md-progress-circular>',
     controller: SpinnerController

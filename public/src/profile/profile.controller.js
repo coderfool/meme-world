@@ -1,6 +1,8 @@
 angular.module('MemeWorld')
 .controller('ProfileController', ProfileController);
 
+const baseUrl = 'https://meme-world.herokuapp.com';
+
 ProfileController.$inject = ['$rootScope', '$mdDialog', '$mdToast', '$http'];
 
 function ProfileController($rootScope, $mdDialog, $mdToast, $http) {
@@ -132,12 +134,10 @@ function ProfileController($rootScope, $mdDialog, $mdToast, $http) {
                     .highlightClass('md-accent'))
                 .then(function(res) {
                     $mdToast.hide();
+                    ctrl.close();
+                    window.location.href = baseUrl;
                 })
                 .catch(angular.noop);
-                ctrl.close();
-                setTimeout(function() {
-                    window.location.reload();
-                }, 1000);
             })
             .catch(err => {
                 console.error(err);

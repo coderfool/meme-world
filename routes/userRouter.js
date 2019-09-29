@@ -6,6 +6,7 @@ const Users = require('../models/user');
 const Posts = require('../models/post');
 const Comments = require('../models/comment');
 const authenticate = require('../authenticate');
+const path = require('path');
 const passwordReset = require('../password-reset');
 
 const router = express.Router();
@@ -26,6 +27,68 @@ const upload = multer({
             cb(new Error('Only jpg/jpeg/png images are allowed'), false);
         }
     }
+});
+
+router.post('/forgotPassword', (req, res, next) => {
+    const token = passwordReset.generateResetToken(10);
+    Users.findOne({email: req.body.email})
+    .then(user => {
+        if (!user) {
+            const err = new Error('User not found');
+            err.status = 404;
+            return next(err);
+        }
+        user.resetToken = token;
+        user.tokenExp = Date.now() + 3600 * 1000;
+        user.save()
+        .then(user => {
+            passwordReset.sendResetEmail({
+                username: user.username, 
+                email: user.email
+            }, token)
+            .then(resp => {
+                res.status(200).end();
+            })
+            .catch(err => next(err));
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+router.get('/resetPassword', (req, res, next) => {
+    const token = req.query.token;
+    passwordReset.validateToken(token)
+    .then(user => {
+        user.profilePic = (user.image === '' ? 'false' : 'true');
+        res.render('reset-password', {
+            layout: false,
+            user: user,
+            token: token
+        });
+    })
+    .catch(err => {
+        res.redirect('/');
+    });
+});
+
+router.post('/resetPassword', (req, res, next) => {
+    const token = req.query.token;
+    passwordReset.validateToken(token)
+    .then(user => {
+        user.setPassword(req.body.password)
+        .then(user => {
+            user.resetToken = undefined;
+            user.tokenExp = undefined;
+            user.save()
+            .then(user => {
+                res.status(200).end();
+            })
+            .catch(err => next(err));
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
 });
 
 router.route('/:userId')
@@ -103,18 +166,6 @@ router.route('/:userId')
                 res.status(200).end();
             })
             .catch(err => next(err));
-        })
-        .catch(err => next(err));
-    })
-    .catch(err => next(err));
-});
-
-router.get('/:username/resetPassword', (req, res, next) => {
-    Users.findOne({username: req.params.username})
-    .then(user => {
-        passwordReset.resetAndEmail(user)
-        .then(info => {
-            res.status(200).end();
         })
         .catch(err => next(err));
     })

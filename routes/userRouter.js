@@ -61,7 +61,7 @@ router.get('/resetPassword', (req, res, next) => {
     passwordReset.validateToken(token)
     .then(user => {
         user.profilePic = (user.image === '' ? 'false' : 'true');
-        res.render('reset-password', {
+        res.render('reset-password-form', {
             layout: false,
             user: user,
             token: token

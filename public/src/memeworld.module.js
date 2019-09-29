@@ -60,7 +60,7 @@ function AppController($mdDialog, $mdMedia, $rootScope, $http, $scope) {
             }
         })
         .catch(err => {
-            if (err.data.error && err.data.error.message === 'jwt expired') {
+            if (err.data && err.data.error && err.data.error.message === 'jwt expired') {
                 $rootScope.loggedIn = false;
                 localStorage.removeItem('jwt');
                 localStorage.removeItem('user');

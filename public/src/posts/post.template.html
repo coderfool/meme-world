@@ -1,4 +1,4 @@
-<md-card layout="column" layout-align="start center" class="relative">
+<md-card layout="column" layout-align="start center" flex-xs flex-sm class="relative mb-30">
     <md-card-title>
         <md-card-title-text>
             <span class="md-headline">{{$ctrl.post.title}}</span>
@@ -24,13 +24,13 @@
     </a>
     <md-list layout="row" layout-align="space-between">
         <md-list-item>
-            <span class="md-caption">{{$ctrl.post.upvotes.length}} Upvotes</span>
+            <span class="md-caption" ng-class="$root.$mdMedia('gt-xs') ? 'font-12': 'font-10'">{{$ctrl.post.upvotes.length}} Upvotes</span>
         </md-list-item>
         <md-list-item>
-            <span class="md-caption">{{$ctrl.post.downvotes.length}} Downvotes</span>
+            <span class="md-caption" ng-class="$root.$mdMedia('gt-xs') ? 'font-12': 'font-10'">{{$ctrl.post.downvotes.length}} Downvotes</span>
         </md-list-item>
         <md-list-item>
-            <span class="md-caption">{{$ctrl.post.commentCount}} Comments</span>
+            <span class="md-caption" ng-class="$root.$mdMedia('gt-xs') ? 'font-12': 'font-10'">{{$ctrl.post.commentCount}} Comments</span>
         </md-list-item>
     </md-list>
     <md-card-actions layout="row" layout-align="center">
@@ -47,5 +47,7 @@
             <i class="material-icons md-dark">comment</i>
         </md-button>
     </md-card-actions>
-    <span class="bottom-right font-12">{{$ctrl.post.date}}</span>
+    <div layout="row" layout-padding>
+        <span class="bottom-right" ng-class="$root.$mdMedia('gt-sm') ? 'font-12': 'font-10'">{{$ctrl.post.date}}</span>
+    </div>
 </md-card>

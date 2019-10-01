@@ -2,10 +2,17 @@
     layout="column"
     layout-align="start center"
     layout-fill 
-    class="md-sidenav-left" 
+    class="md-sidenav-left"
+    ng-class="{'sidenav-mobile': !$root.$mdMedia('gt-sm')}" 
     md-whiteframe 
-    md-component-id="left" 
+    md-component-id="left-sidenav" 
     md-is-locked-open="$mdMedia('gt-sm')">
+    <div hide-gt-sm layout="row" class="full-width">
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="$ctrl.close()">
+            <i class="material-icons">close</i>
+        </md-button>
+    </div>
     <md-list>
         <md-list-item>
             <md-button 

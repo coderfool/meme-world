@@ -1,4 +1,4 @@
-<div ng-if="ctrl.post" layout="column" flex="75" class="relative">
+<div ng-if="ctrl.post" layout="column" layout-margin flex="75" flex-xs="100" flex-sm="100" class="relative">
     <div layout="row" layout-align="center">
         <h1 ng-if="ctrl.err" class="md-display-1">{{ctrl.messages.default}}</h1>
         <h1 class="md-headline">{{ctrl.post.title}}</h1>
@@ -23,16 +23,16 @@
     </div>
     <div layout="column" layout-margin>
         <div ng-if="ctrl.imgSrc" layout="row">
-            <div layout="row" flex="50">
+            <div layout="row" flex="100" flex-gt-sm="50">
                 <div class="relative">
                     <img ng-src="{{ctrl.imgSrc}}" class="img-responsive">
                     <md-button class="md-icon-button white-bg remove-btn top-right" aria-label="Close" ng-click="ctrl.removeImage()">
-                        <i class="material-icons">close</i>
+                        <i class="material-icons">delete</i>
                     </md-button>
                 </div>
             </div>
         </div>
-        <form name="commentForm" enctype="multipart/form-data" layout="row" layout-align="center center" flex>
+        <form name="commentForm" enctype="multipart/form-data" layout="column" layout-gt-sm="row" layout-align="center center" flex>
             <md-input-container class="width-80">
                 <label>Your comment</label>
                 <input type="text" name="comment" ng-model="ctrl.newComment">

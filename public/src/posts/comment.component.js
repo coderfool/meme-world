@@ -119,7 +119,7 @@ function CommentController($rootScope, $http, $mdDialog, $mdMedia) {
         $mdDialog.show({
             templateUrl: 'src/posts/edit-comment.template.html',
             clickOutsideToClose: true,
-            fullscreen: !$mdMedia('gt-sm'),
+            fullscreen: !$mdMedia('gt-xs'),
             controller: EditCommentController,
             controllerAs: 'ctrl',
             locals: {

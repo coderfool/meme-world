@@ -38,9 +38,9 @@ function config($stateProvider, $urlRouterProvider, $locationProvider, $httpProv
     $httpProvider.interceptors.push('loadingHttpInterceptor');
 }
 
-AppController.$inject = ['$mdDialog', '$mdMedia', '$rootScope', '$http', '$scope'];
+AppController.$inject = ['$mdDialog', '$mdMedia', '$mdSidenav', '$rootScope', '$http'];
 
-function AppController($mdDialog, $mdMedia, $rootScope, $http, $scope) {
+function AppController($mdDialog, $mdMedia, $mdSidenav, $rootScope, $http) {
     const ctrl = this;
     const jwt = localStorage.getItem('jwt');
     if (jwt === null) {
@@ -71,11 +71,13 @@ function AppController($mdDialog, $mdMedia, $rootScope, $http, $scope) {
         });
     }
     
+    $rootScope.$mdMedia = $mdMedia;
+    
     $rootScope.loginPrompt = function() {
         $mdDialog.show({
             templateUrl: 'src/login/login.template.html',
             clickOutsideToClose: true,
-            fullscreen: !$mdMedia('gt-sm'),
+            fullscreen: !$mdMedia('gt-xs'),
             controller: LoginController,
             controllerAs: 'ctrl'
         });
@@ -85,7 +87,7 @@ function AppController($mdDialog, $mdMedia, $rootScope, $http, $scope) {
         $mdDialog.show({
             templateUrl: 'src/registration/registration.template.html',
             clickOutsideToClose: true,
-            fullscreen: !$mdMedia('gt-sm'),
+            fullscreen: !$mdMedia('gt-xs'),
             controller: RegistrationController,
             controllerAs: 'ctrl'
         });
@@ -99,7 +101,7 @@ function AppController($mdDialog, $mdMedia, $rootScope, $http, $scope) {
         $mdDialog.show({
             templateUrl: 'src/profile/profile.template.html',
             clickOutsideToClose: true,
-            fullscreen: !$mdMedia('gt-sm'),
+            fullscreen: !$mdMedia('gt-xs'),
             controller: ProfileController,
             controllerAs: 'ctrl'
         });
@@ -117,7 +119,11 @@ function AppController($mdDialog, $mdMedia, $rootScope, $http, $scope) {
             console.error(err);
         });
         window.location.reload();
-    }
+    };
+
+    ctrl.toggleSidenav = function() {
+        $mdSidenav('left-sidenav').toggle();
+    };
 }
 
 LoginController.$inject = ['$mdDialog', '$http', '$rootScope'];

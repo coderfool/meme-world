@@ -28,11 +28,12 @@ function ResetPasswordController($location, $http, $mdToast, $state) {
             password: ctrl.password
         })
         .then(res => {
+            resetPassword.reset();
             $mdToast.show(
                 $mdToast.simple()
                 .textContent('You password was reset successfully')
                 .position('left right bottom')
-                .hideDelay(3000)
+                .hideDelay(2000)
                 .action('Close')
                 .actionKey('c')
                 .highlightAction(true)

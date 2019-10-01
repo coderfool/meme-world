@@ -1,7 +1,7 @@
 <div layout="row" layout-padding class="relative">
     <span class="bottom-right font-12">{{$ctrl.comment.date}}</span>
-    <div flex="10">
-        <img flex="80" ng-if="$ctrl.comment.profilePic" class="avatar" ng-src="data:image/png;base64,{{$ctrl.comment.profilePic}}">
+    <div>
+        <img flex="80" ng-if="$ctrl.comment.profilePic" ng-src="data:image/png;base64,{{$ctrl.comment.profilePic}}">
         <i ng-if="!$ctrl.comment.profilePic" class="material-icons font-50" layout-padding>account_circle</i>
     </div>
     <div layout="column">

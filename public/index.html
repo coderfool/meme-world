@@ -12,39 +12,48 @@
     </head>
     <body layout="column">
         <header>
-            <md-toolbar layout="row" class="md-toolbar-tools">
-                <div flex="15">
-                    <a href="/" layout="row" layout-align="start center">
-                        <span flex="33">
+            <md-toolbar layout-xs="column" layout="row">
+                <div layout="row" layout-align="start center" flex>
+                    <md-button hide-gt-sm class="md-icon-button" ng-click="ctrl.toggleSidenav()">
+                        <i class="material-icons font-28">menu</i>
+                    </md-button>
+                    <div layout="row" layout-align="start center" flex="100" flex-gt-xs="55" flex-gt-sm="35" flex-gt-md="25">
+                        <span flex="20" flex-gt-xs="20" flex-gt-md="30">
                             <img src="/assets/images/logo.png" class="img-responsive" alt="logo" layout-padding> 
                         </span>
-                        <h1 layout-padding layout-padding>Meme World</h1>
-                    </a>
+                        <a href="/" class="no-decorate text-white">
+                            <h1 layout-padding class="md-headline">Meme World</h1>
+                        </a>
+                    </div>
+                    <span layout-gt-sm flex></span>
                 </div>
-                <span flex></span>
-                <md-button ui-sref="home" ui-sref-active="md-primary white-bg">Home</md-button>
-                <div ng-if="!loggedIn">
-                    <md-button class="md-raised md-accent" ng-click="loginPrompt()">Log In</md-button>
-                    <md-button class="md-raised" ng-click="signupPrompt()">Sign Up</md-button>
-                </div>
-                <div ng-if="loggedIn" layout="row" flex="15">
-                    <md-menu md-position-mode="target-right bottom target" md-offset="-5 5">
-                        <md-button layout="row" layout-align="start center" ng-click="ctrl.showUserMenu($mdMenu, $event)">
-                            <img ng-if="user.image" flex="35" ng-src="data:image/png;base64,{{user.image}}" class="avatar" layout-padding>
-                            <i ng-if="!user.image" class="material-icons font-36" layout-padding>account_circle</i>
-                            {{user.username}}
-                            <i md-menu-origin class="material-icons">keyboard_arrow_down</i>
-                        </md-button>
-                        <md-menu-content class="md-dense">
-                            <md-menu-item>
-                                <md-button ng-click="ctrl.showProfileDialog()">Edit Profile</md-button>
-                            </md-menu-item>
-                            <md-menu-divider></md-menu-divider>
-                            <md-menu-item>
-                                <md-button ng-click="ctrl.logOut()">Log Out</md-button>
-                            </md-menu-item>
-                        </md-menu-content>
-                    </md-menu>
+                <div hide-gt-xs class="border-bottom"></div>
+                <div layout="row" layout-align="center center" flex-gt-xs="45" flex-gt-sm="35">
+                    <md-button ui-sref="home" ui-sref-active="md-primary white-bg">Home</md-button>
+                    <div ng-if="!loggedIn">
+                        <md-button class="md-raised md-accent" ng-click="loginPrompt()">Log In</md-button>
+                        <md-button class="md-raised" ng-click="signupPrompt()">Sign Up</md-button>
+                    </div>
+                    <span ng-if="loggedIn" hide-gt-sm flex></span>
+                    <div ng-if="loggedIn" layout="row" flex="55" flex-gt-sm="65">
+                        <md-menu md-position-mode="target-right bottom target" md-offset="-5 5" flex>
+                            <md-button layout="row" layout-align="start center" ng-click="ctrl.showUserMenu($mdMenu, $event)">
+                                <img ng-if="user.image" class="avatar" flex="35" flex-gt-sm="30" ng-src="data:image/png;base64,{{user.image}}" layout-padding>
+                                <i ng-if="!user.image" class="material-icons font-36" layout-padding>account_circle</i>
+                                {{user.username}}
+                                <i md-menu-origin class="material-icons">keyboard_arrow_down</i>
+                            </md-button>
+                            <md-menu-content class="md-dense">
+                                <md-menu-item>
+                                    <md-button ng-click="ctrl.showProfileDialog()">Edit Profile</md-button>
+                                </md-menu-item>
+                                <md-menu-divider></md-menu-divider>
+                                <md-menu-item>
+                                    <md-button ng-click="ctrl.logOut()">Log Out</md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </div>
                 </div>
             </md-toolbar>
         </header>

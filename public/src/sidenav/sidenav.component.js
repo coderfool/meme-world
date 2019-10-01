@@ -24,7 +24,7 @@ function SideNav($mdSidenav, $rootScope, $mdDialog, $mdMedia, PostsService) {
         $mdDialog.show({
             templateUrl: 'src/posts/new-post.template.html',
             clickOutsideToClose: true,
-            fullscreen: !$mdMedia('gt-sm'),
+            fullscreen: !$mdMedia('gt-xs'),
             controller: NewPostController,
             controllerAs: 'ctrl'
         });
@@ -51,6 +51,10 @@ function SideNav($mdSidenav, $rootScope, $mdDialog, $mdMedia, PostsService) {
             ctrl.setFilter('myPosts');
             $rootScope.posts = posts;
         }
+    };
+
+    ctrl.close = function() {
+        $mdSidenav('left-sidenav').close();
     };
 }
 

@@ -8,8 +8,6 @@
 
 .spinner {
     position: fixed;
-    width: 100vw;
-    height: 100vh;
     left: 50%;
     top: 50%;
     z-index: 100;
@@ -44,7 +42,8 @@
 }
 
 .avatar {
-    border-radius: 50% !important;
+    border-radius: 30% !important;
+    max-height: 80px !important;
 }
 
 .full-width {
@@ -55,12 +54,21 @@
     height: 100% !important;
 }
 
+.sidenav-mobile {
+    width: 150px !important;
+    min-width: 100px !important;
+}
+
 .width-60 {
     width: 60% !important;
 }
 
 .width-80 {
     width: 80% !important;
+}
+
+.width-100 {
+    width: 100px !important;
 }
 
 .width-150 {
@@ -87,6 +95,14 @@
     font-size: 12px !important;
 }
 
+.font-10 {
+    font-size: 10px !important;
+}
+
+.font-28 {
+    font-size: 28px !important;
+}
+
 .font-36 {
     font-size: 36px !important;
 }
@@ -105,12 +121,16 @@
     width: 20px !important;
 }
 
-html {
-    overflow-y: scroll !important;
-}
-
 .mb-5 {
     margin-bottom: 5px !important;
+}
+
+.mb-30 {
+    margin-bottom: 30px !important;
+}
+
+.ml-5 {
+    margin-left: 5px !important;
 }
 
 .mt-30 {
@@ -119,4 +139,16 @@ html {
 
 .underlined {
     text-decoration-line: underline;
+}
+
+.no-decorate {
+    text-decoration: none;
+}
+
+.text-white {
+    color: white;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #fff;
 }

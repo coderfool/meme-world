@@ -42,6 +42,7 @@ AppController.$inject = ['$mdDialog', '$mdMedia', '$mdSidenav', '$rootScope', '$
 
 function AppController($mdDialog, $mdMedia, $mdSidenav, $rootScope, $http) {
     const ctrl = this;
+    $rootScope.showSidenav = true;
     const jwt = localStorage.getItem('jwt');
     if (jwt === null) {
         $rootScope.loggedIn = false;

@@ -8,7 +8,7 @@ PostsController.$inject = ['PostsService', '$rootScope'];
 
 function PostsController(PostsService, $rootScope) {
     const ctrl = this;
-    $rootScope.orderPostsBy = '-upvotes.length';
+
     $rootScope.posts = [];
     ctrl.messages = {
         default: 'Something went wrong. Please check your internet connection and try again.'

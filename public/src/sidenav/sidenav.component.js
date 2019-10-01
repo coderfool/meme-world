@@ -4,16 +4,19 @@ angular.module('MemeWorld')
     controller: SideNav
 });
 
-SideNav.$inject = ['$mdSidenav', '$rootScope', '$mdDialog', '$mdMedia', 'PostsService'];
+SideNav.$inject = ['$mdSidenav', '$rootScope', '$mdDialog', '$mdMedia', '$state', 'PostsService'];
 
-function SideNav($mdSidenav, $rootScope, $mdDialog, $mdMedia, PostsService) {
+function SideNav($mdSidenav, $rootScope, $mdDialog, $mdMedia, $state, PostsService) {
     const ctrl = this;
     ctrl.selectedFilter = 'popular';
+    $rootScope.orderPostsBy = '-upvotes.length';
     
     ctrl.setFilter = function(filter) {
         ctrl.selectedFilter = filter;
         $rootScope.orderPostsBy = (filter === 'new' ? '-createdAt' : '-upvotes.length');
         $rootScope.posts = PostsService.allPosts;
+        ctrl.close();
+        $state.go('home');
     };
 
     ctrl.addPostDialog = function() {
@@ -51,6 +54,7 @@ function SideNav($mdSidenav, $rootScope, $mdDialog, $mdMedia, PostsService) {
             ctrl.setFilter('myPosts');
             $rootScope.posts = posts;
         }
+        ctrl.close();
     };
 
     ctrl.close = function() {

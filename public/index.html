@@ -58,7 +58,10 @@
             </md-toolbar>
         </header>
         <spinner class="spinner"></spinner>
-        <ui-view flex layout="row" layout-align="center"></ui-view>
+        <div flex layout="row">
+            <sidenav class="sidenav"></sidenav>
+            <ui-view flex layout="row" layout-align="center"></ui-view>
+        </div>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>

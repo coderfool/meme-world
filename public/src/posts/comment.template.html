@@ -4,7 +4,7 @@
         <img class="img-responsive" ng-if="$ctrl.comment.profilePic" ng-src="data:image/png;base64,{{$ctrl.comment.profilePic}}">
         <i ng-if="!$ctrl.comment.profilePic" class="material-icons font-36" layout-padding>account_circle</i>
     </div>
-    <div layout="column">
+    <div layout="column" flex>
         <span class="md-subhead"><b>{{$ctrl.comment.username}}</b></span>
         <span class="padding-top-10">{{$ctrl.comment.text}}</span>
         <div layout="row">

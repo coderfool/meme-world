@@ -187,6 +187,8 @@ function LoginController($mdDialog, $http, $rootScope) {
             return;
         }
 
+        ctrl.processing = true;
+
         $http.post('../users/login', {
             username: ctrl.username,
             password: ctrl.password
@@ -205,10 +207,12 @@ function LoginController($mdDialog, $http, $rootScope) {
             })
             .catch(err => {
                 console.error(err);
-            })
+            });
+            ctrl.processing = false;
         })
         .catch(err => {
             ctrl.err.unauthorized = true;
+            ctrl.processing = false;
         });
     }
 }

@@ -94,6 +94,8 @@ function NewPostController($mdDialog, $http, $state, PostsService) {
             return;
         }
 
+        ctrl.processing = true;
+
         const formData = new FormData();
         formData.append('title', ctrl.title);
         formData.append('image', ctrl.image);
@@ -108,6 +110,7 @@ function NewPostController($mdDialog, $http, $state, PostsService) {
             }
             ctrl.close();
             $state.go('post', {postId: res.data._id});
+            ctrl.processing = false;
         })
         .catch(err => {
             if (err.data && err.data.error && err.data.error.status === 413) {
@@ -119,6 +122,7 @@ function NewPostController($mdDialog, $http, $state, PostsService) {
             else {
                 console.error(err);
             }
+            ctrl.processing = false;
         });
     };
 }

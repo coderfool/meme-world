@@ -43,7 +43,8 @@
                 </label>
                 <input image-upload preview-image="ctrl.setImageSrc" type="file" accept="image/png,image/jpeg" name="image" id="image" class="ng-hide"> 
                 <span flex></span>
-                <md-button type="submit" class="md-raised md-accent" ng-click="ctrl.submitComment(commentForm.$valid)">Comment</md-button>
+                <md-button type="submit" class="md-raised md-accent" ng-click="ctrl.submitComment(commentForm.$valid)"
+                ng-disabled="ctrl.processing">Comment</md-button>
             </form>
             <h1 class="md-title" ng-if="ctrl.post.comments.length === 0">{{ctrl.messages.commentsEmpty}}</h1>
             <div ng-if="ctrl.post.comments.length > 0" class="list-unstyled">

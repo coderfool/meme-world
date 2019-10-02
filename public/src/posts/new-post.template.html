@@ -21,14 +21,14 @@
                 <div class="relative">
                     <img ng-src="{{ctrl.imgSrc}}" class="img-responsive">
                     <md-button class="md-icon-button white-bg remove-btn top-right" aria-label="Close" ng-click="ctrl.removeImage()">
-                        <i class="material-icons">close</i>
+                        <i class="material-icons">delete</i>
                     </md-button>
                 </div>
             </div>    
             <span ng-if="ctrl.err" md-colors="{color: 'red'}" class="md-body-1" layout-padding>{{ctrl.err}}</span>
             <span ng-if="ctrl.success" md-colors="{color: 'green'}" class="md-body-1" layout-padding>{{ctrl.success}}</span>
             <div layout="row" layout-align="center">
-                <md-button ng-if="ctrl.imgSrc" layout-margin type="submit" class="md-raised md-accent" ng-click="ctrl.submit(addPost.$valid)">Post</md-button>
+                <md-button ng-if="ctrl.imgSrc" layout-margin type="submit" class="md-raised md-accent" ng-click="ctrl.submit(addPost.$valid)" ng-disabled="ctrl.processing">Post</md-button>
             </div>
         </form>
     </md-dialog-content>

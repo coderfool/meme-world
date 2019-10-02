@@ -65,6 +65,8 @@ function ProfileController($rootScope, $mdDialog, $mdToast, $http) {
             return;
         }
 
+        ctrl.processing = true;
+
         const formData = new FormData();
         formData.append('image', ctrl.image);
         formData.append('username', ctrl.username);
@@ -96,6 +98,7 @@ function ProfileController($rootScope, $mdDialog, $mdToast, $http) {
             })
             .catch(angular.noop);
             ctrl.close();
+            ctrl.processing = false;
         })
         .catch(err => {
             if (err.data && err.data.error && err.data.error.status === 413) {
@@ -108,10 +111,13 @@ function ProfileController($rootScope, $mdDialog, $mdToast, $http) {
             else {
                 console.error(err);
             }
+            ctrl.processing = false;
         });
     };
 
     ctrl.deleteAccount = function() {
+        ctrl.processing = true;
+
         $http.post('../users/login', {
             username: $rootScope.user.username,
             password: ctrl.passwordConfirm
@@ -138,6 +144,7 @@ function ProfileController($rootScope, $mdDialog, $mdToast, $http) {
                     window.location.href = baseUrl;
                 })
                 .catch(angular.noop);
+                ctrl.processing = false;
             })
             .catch(err => {
                 console.error(err);
@@ -154,10 +161,12 @@ function ProfileController($rootScope, $mdDialog, $mdToast, $http) {
                     $mdToast.hide();
                 })
                 .catch(angular.noop);
+                ctrl.processing = false;
             });
         })
         .catch(err => {
             ctrl.err.deleteErr = true;
+            ctrl.processing = false;
         });
     };
 }

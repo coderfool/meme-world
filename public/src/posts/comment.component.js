@@ -54,6 +54,7 @@ function CommentController($rootScope, $http, $mdDialog, $mdMedia) {
         $http.get(`../../posts/comments/${ctrl.comment._id}/upvote`)
         .then(res => {
             ctrl.comment = res.data;
+            ctrl.comment.date = new Date(ctrl.comment.createdAt).toDateString();
             ctrl.upvoted = isUpvoted();
             ctrl.downvoted = isDownvoted();
         })
@@ -70,6 +71,7 @@ function CommentController($rootScope, $http, $mdDialog, $mdMedia) {
         $http.get(`../../posts/comments/${ctrl.comment._id}/downvote`)
         .then(res => {
             ctrl.comment = res.data;
+            ctrl.comment.date = new Date(ctrl.comment.createdAt).toDateString();
             ctrl.upvoted = isUpvoted();
             ctrl.downvoted = isDownvoted();
         })

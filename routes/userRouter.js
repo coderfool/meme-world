@@ -120,8 +120,12 @@ router.route('/:userId')
             err.status = 404;
             return next(err);
         }
-        req.body.image = req.file ? req.file.buffer.toString('base64') : ''; 
-        
+        if (req.file) {
+            req.body.image = req.file.buffer.toString('base64');
+        }
+        else if (req.body.image === 'null') {
+            req.body.image = '';
+        }
         Users.findByIdAndUpdate(req.user._id, {$set: req.body}, {new: true})
         .then(user => {
             if (req.body.oldPassword && req.body.newPassword) {

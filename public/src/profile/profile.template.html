@@ -62,7 +62,7 @@
                     </div>
                 </span>
                 <md-button class="md-accent" ng-click="ctrl.initializeForm()">Reset</md-button>
-                <md-button type="submit" class="md-raised md-primary" ng-click="ctrl.submit(updateProfile.$valid)">Save</md-button>
+                <md-button type="submit" class="md-raised md-primary" ng-click="ctrl.submit(updateProfile.$valid)" ng-disabled="ctrl.processing">Save</md-button>
             </form>
         </div>
         <h2 class="md-title mb-5">Delete Account</h2>
@@ -76,7 +76,8 @@
                     <input type="password" name="password" ng-model="ctrl.passwordConfirm" ng-focus="ctrl.clearErrors()" required>
                     <div ng-messages="deleteAccount.password.$error"></div>
                 </md-input-container>
-                <md-button type="submit" class="md-raised md-warn" ng-click="ctrl.deleteAccount()">Delete</md-button>
+                <md-button type="submit" class="md-raised md-warn" ng-click="ctrl.deleteAccount()" ng-disabled="ctrl.processing">Delete</md-button>
+                {{ctrl.processing}}
                 <span ng-if="ctrl.err.deleteErr" md-colors="{color: 'red'}">{{ctrl.messages.incorrectPassword}}</span>
             </div>
         </form>

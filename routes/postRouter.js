@@ -58,6 +58,7 @@ router.route('/')
         author: String(req.user._id)
     })
     .then(post => {
+        post.set('commentCount', 0, Number, {strict: false});
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(post);

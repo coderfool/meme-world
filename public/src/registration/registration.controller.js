@@ -40,6 +40,8 @@ function RegistrationController($http, $mdToast, $mdDialog) {
             return;
         }
         
+        ctrl.processing = true;
+
         const formData = new FormData();
         formData.append('email', ctrl.email);
         formData.append('username', ctrl.username);
@@ -70,6 +72,7 @@ function RegistrationController($http, $mdToast, $mdDialog) {
             })
             .catch(angular.noop);
             ctrl.close();
+            ctrl.processing = false;
         })
         .catch(err => {
             if (err.data && err.data.error && err.data.error.status === 413) {
@@ -81,6 +84,7 @@ function RegistrationController($http, $mdToast, $mdDialog) {
             else {
                 console.error(err);
             }
+            ctrl.processing = false;
         });
     }
 }

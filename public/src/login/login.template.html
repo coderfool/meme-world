@@ -21,7 +21,7 @@
             <div ng-messages="ctrl.err" role="alert" class="md-body-1 text-center">
                 <span ng-message="unauthorized" md-colors="{color: 'red'}">{{ctrl.messages.unauthorized}}</span>
             </div>
-            <md-button type="submit" class="md-raised md-accent" ng-click="ctrl.submit(login.$valid)">Log In</md-button>
+            <md-button type="submit" class="md-raised md-accent" ng-click="ctrl.submit(login.$valid)" ng-disabled="ctrl.processing">Log In</md-button>
         </form>
         <md-button ng-if="!ctrl.forgot" ng-click="ctrl.showForgotPassword()">Forgot password?</md-button>
         <form ng-if="ctrl.forgot" name="forgotPassword" class="full-width" layout="column" layout-align="start center">

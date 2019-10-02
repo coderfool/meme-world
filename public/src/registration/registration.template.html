@@ -41,7 +41,7 @@
                 </div>
             </div>
             <span ng-if="ctrl.err" md-colors="{color: 'red'}" class="md-body-1 text-center" layout-padding>{{ctrl.err}}</span>
-            <md-button layout-margin type="submit" class="md-raised md-accent" ng-click="ctrl.submit(registration.$valid)">Sign Up</md-button>
+            <md-button layout-margin type="submit" class="md-raised md-accent" ng-click="ctrl.submit(registration.$valid)" ng-disabled="ctrl.processing">Sign Up</md-button>
         </form>
         <div layout="row" layout-align="center">
             <span>Already have an account?<md-button class="md-primary" ng-click="$root.loginPrompt();">Log In</md-button></span>

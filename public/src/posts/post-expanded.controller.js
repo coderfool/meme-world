@@ -46,6 +46,8 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
             return;
         }
 
+        ctrl.processing = true;
+
         const comment = {
             text: ctrl.newComment,
             image: ctrl.image
@@ -63,6 +65,7 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
                 PostsService.allPosts[index] = ctrl.post;
                 PostsService.allPosts[index].commentCount = ctrl.post.comments.length;
             }
+            ctrl.processing = false;
         })
         .catch(err => {
             if (err.data && err.data.error && err.data.error.status === 413) {
@@ -74,6 +77,7 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
             else {
                 console.error(err);
             }
+            ctrl.processing = false;
         });
     };
     

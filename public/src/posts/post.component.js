@@ -53,6 +53,10 @@ function PostController($rootScope, $http, PostsService, $mdDialog, $mdToast) {
         $http.get(`../posts/${ctrl.post._id}/upvote`)
         .then(res => {
             ctrl.post = res.data;
+            const index = PostsService.allPosts.findIndex(function(post) {
+                return post._id === ctrl.post._id;
+            });
+            PostsService.allPosts[index] = ctrl.post;
             ctrl.upvoted = isUpvoted();
             ctrl.downvoted = isDownvoted();
             PostsService.getComments(ctrl.post._id)
@@ -76,6 +80,10 @@ function PostController($rootScope, $http, PostsService, $mdDialog, $mdToast) {
         $http.get(`../posts/${ctrl.post._id}/downvote`)
         .then(res => {
             ctrl.post = res.data;
+            const index = PostsService.allPosts.findIndex(function(post) {
+                return post._id === ctrl.post._id;
+            });
+            PostsService.allPosts[index] = ctrl.post;
             ctrl.upvoted = isUpvoted();
             ctrl.downvoted = isDownvoted();
             PostsService.getComments(ctrl.post._id)

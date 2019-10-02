@@ -31,6 +31,7 @@ function SideNav($mdSidenav, $rootScope, $mdDialog, $mdMedia, $state, PostsServi
             controller: NewPostController,
             controllerAs: 'ctrl'
         });
+        ctrl.close();
     };
 
     ctrl.showMyPosts = function() {

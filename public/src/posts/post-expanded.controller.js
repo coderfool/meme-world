@@ -56,6 +56,13 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
             ctrl.post.comments.push(res.data);
             ctrl.removeImage();
             commentForm.reset();
+            if (PostsService.allPosts) {
+                let index = PostsService.allPosts.findIndex(function(post) {
+                    return post._id === ctrl.post._id;
+                });
+                PostsService.allPosts[index] = ctrl.post;
+                PostsService.allPosts[index].commentCount = ctrl.post.comments.length;
+            }
         })
         .catch(err => {
             if (err.data && err.data.error && err.data.error.status === 413) {
@@ -77,6 +84,13 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
 
     ctrl.removeComment = function(index) {
         ctrl.post.comments.splice(index, 1);
+        if (PostsService.allPosts) {
+            index = PostsService.allPosts.findIndex(function(post) {
+                return post._id === ctrl.post._id;
+            });
+            PostsService.allPosts[index] = ctrl.post;
+            PostsService.allPosts[index].commentCount = ctrl.post.comments.length;
+        }
     };
 
     ctrl.updateComment = function(index, comment) {

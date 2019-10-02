@@ -16,7 +16,8 @@ function ExpandedPostController(PostsService, postId, $rootScope, $state, $mdToa
     
     const post = PostsService.getPost(postId);
     post.then(res => {
-        ctrl.post = res.data;
+        
+        ctrl.post = res;
         ctrl.owns = ($rootScope.user && ctrl.post.author === $rootScope.user._id);
         const comments = PostsService.getComments(postId);
         comments.then(res => {

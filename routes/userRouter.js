@@ -29,6 +29,11 @@ const upload = multer({
     }
 });
 
+router.get('/logout', authenticate.isLoggedIn, (req, res, next) => {
+    req.logout();
+    res.status(200).end();
+});
+
 router.post('/forgotPassword', (req, res, next) => {
     const token = passwordReset.generateResetToken(10);
     Users.findOne({email: req.body.email})
@@ -232,11 +237,6 @@ router.get('/verifyJWT/:jwt', (req, res, next) => {
     res.json({
         expired: expired,
     });
-});
-
-router.get('/logout', authenticate.isLoggedIn, (req, res, next) => {
-    req.logout();
-    res.redirect('/');
 });
 
 module.exports = router;

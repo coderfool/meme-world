@@ -109,17 +109,16 @@ function AppController($mdDialog, $mdMedia, $mdSidenav, $rootScope, $http) {
     };
 
     ctrl.logOut = function() {
-        localStorage.removeItem('jwt');
-        localStorage.removeItem('user');
         $http.get('../users/logout')
         .then(res => {
+            localStorage.removeItem('jwt');
+            localStorage.removeItem('user');
             $rootScope.loggedIn = false;
             $rootScope.user = null;
         })
         .catch(err => {
             console.error(err);
         });
-        window.location.reload();
     };
 
     ctrl.toggleSidenav = function() {
@@ -200,10 +199,7 @@ function LoginController($mdDialog, $http, $rootScope) {
                 localStorage.setItem('user', JSON.stringify(res.data));
                 $rootScope.user = res.data;
                 ctrl.close();
-                setTimeout(function() {
-                    $rootScope.loggedIn = true;
-                }, 1000);
-                window.location.reload();
+                $rootScope.loggedIn = true;
             })
             .catch(err => {
                 console.error(err);

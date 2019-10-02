@@ -8,19 +8,17 @@ PostsController.$inject = ['PostsService', '$rootScope'];
 
 function PostsController(PostsService, $rootScope) {
     const ctrl = this;
-
+    
     $rootScope.posts = [];
     ctrl.messages = {
         default: 'Something went wrong. Please check your internet connection and try again.'
     };
 
-    if (PostsService.allPosts) {
-        $rootScope.posts = PostsService.allPosts;
-    }
-    else {
-        PostsService.getPosts()
+    ctrl.loadPosts = function(index) {
+        PostsService.getPosts(index)
         .then(res => {
-            $rootScope.posts = res;
+            $rootScope.posts = [...$rootScope.posts, ...res];
+            ctrl.showLoadMore = !(res.length === 0);
         })
         .catch(err => {
             if (err.xhrStatus !== 'abort') {
@@ -28,6 +26,14 @@ function PostsController(PostsService, $rootScope) {
                 console.error(err);
             }
         });
+    };
+
+    if (PostsService.allPosts) {
+        $rootScope.posts = PostsService.allPosts;
+        ctrl.showLoadMore = true;
+    }
+    else {
+        ctrl.loadPosts(0);
     }
 
     ctrl.removePost = function(postId) {

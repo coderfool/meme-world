@@ -25,10 +25,12 @@ const upload = multer({
     }
 });
 
-router.route('/')
+router.route('/index/:index')
 .get((req, res, next) => {
     Posts.find()
-    .then(posts => {
+    .then(allPosts => {
+        const index = req.params.index;
+        let posts = allPosts.slice(index, index + 5);
         let promises = [];
         for (let i = 0; i < posts.length; i++) {
             promises.push(Comments.find({postId: posts[i]._id}));

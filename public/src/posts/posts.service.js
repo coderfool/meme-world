@@ -6,16 +6,21 @@ PostsService.$inject = ['$http', '$q', '$rootScope'];
 function PostsService ($http, $q) {
     const service = this;
     
-    service.getPosts = function() {
+    service.getPosts = function(index) {
         const cancel = $q.defer();
         return  $http({
             method: 'GET',
-            url: '../posts',
+            url: `../posts/index/${index}`,
             timeout: cancel.promise,
             cancel: cancel
         })
         .then(res => {
-            service.allPosts = res.data;
+            if (service.allPosts) {
+                service.allPosts = [...service.allPosts, ...res.data];
+            }
+            else {
+                service.allPosts = res.data;
+            }
             return res.data;
         })
         .catch(err => {
@@ -24,13 +29,25 @@ function PostsService ($http, $q) {
     };
 
     service.getPost = function(postId) {
-        const cancel = $q.defer();
-        return $http({
-            method: 'GET',
-            url: `../posts/${postId}`,
-            timeout: cancel.promise,
-            cancel: cancel
-        });
+        if (service.allPosts) {
+            const post = service.allPosts.filter(post => post._id === postId)[0];
+            return Promise.resolve(post);
+        }
+        else {
+            const cancel = $q.defer();
+            return $http({
+                method: 'GET',
+                url: `../posts/${postId}`,
+                timeout: cancel.promise,
+                cancel: cancel
+            })
+            .then(res => {
+                return res.data;
+            })
+            .catch(err => {
+                return Promise.reject(err);
+            });
+        }
     };
 
     service.getComments = function(postId) {

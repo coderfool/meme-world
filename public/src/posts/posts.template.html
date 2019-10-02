@@ -1,4 +1,6 @@
 <div layout="column" layout-align="start center">
     <h1 ng-if="$ctrl.err" class="md-title text-center">{{$ctrl.messages.default}}</h1>
     <post ng-repeat="post in $root.posts | orderBy: $root.orderPostsBy" data="post" remove-post="$ctrl.removePost"></post>
+    <md-button ng-show="$ctrl.showLoadMore" ng-click="$ctrl.loadPosts($root.posts.length)" class="md-raised md-primary">Load More</md-button>
+    <span ng-show="$ctrl.showLoadMore === false && $root.posts.length > 0" class="md-title mb-30">No more memes :(</span>
 </div>

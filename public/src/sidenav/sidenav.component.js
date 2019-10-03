@@ -12,6 +12,9 @@ function SideNav($mdSidenav, $rootScope, $mdDialog, $mdMedia, $state, PostsServi
     $rootScope.orderPostsBy = '-upvotes.length';
     
     ctrl.setFilter = function(filter) {
+        if (!PostsService.allPosts) {
+            return;
+        }
         ctrl.selectedFilter = filter;
         $rootScope.orderPostsBy = (filter === 'new' ? '-createdAt' : '-upvotes.length');
         $rootScope.posts = PostsService.allPosts;

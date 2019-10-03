@@ -15,15 +15,18 @@ function PostsController(PostsService, $rootScope) {
     };
 
     ctrl.loadPosts = function(index) {
+        ctrl.processing = true;
         PostsService.getPosts(index)
         .then(res => {
             $rootScope.posts = [...$rootScope.posts, ...res];
             ctrl.showLoadMore = !(res.length === 0);
+            ctrl.processing = false;
         })
         .catch(err => {
             if (err.xhrStatus !== 'abort') {
                 ctrl.err = true;
                 console.error(err);
+                ctrl.processing = false;
             }
         });
     };

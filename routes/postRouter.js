@@ -25,8 +25,7 @@ const upload = multer({
     }
 });
 
-router.route('/index/:index')
-.get((req, res, next) => {
+router.get('/index/:index', (req, res, next) => {
     Posts.find()
     .then(allPosts => {
         const index = req.params.index;
@@ -51,8 +50,9 @@ router.route('/index/:index')
     .catch(err => {
         next(err);
     });
-})
+});
 
+router.route('/')
 .post(authenticate.isLoggedIn, upload.single('image'), (req, res, next) => {
     Posts.create({
         title: req.body.title,

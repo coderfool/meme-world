@@ -8,14 +8,14 @@ SideNav.$inject = ['$mdSidenav', '$rootScope', '$mdDialog', '$mdMedia', '$state'
 
 function SideNav($mdSidenav, $rootScope, $mdDialog, $mdMedia, $state, PostsService) {
     const ctrl = this;
-    ctrl.selectedFilter = 'popular';
+    $rootScope.selectedFilter = 'popular';
     $rootScope.orderPostsBy = '-upvotes.length';
     
     ctrl.setFilter = function(filter) {
         if (!PostsService.allPosts) {
             return;
         }
-        ctrl.selectedFilter = filter;
+        $rootScope.selectedFilter = filter;
         $rootScope.orderPostsBy = (filter === 'new' ? '-createdAt' : '-upvotes.length');
         $rootScope.posts = PostsService.allPosts;
         ctrl.close();
@@ -41,24 +41,27 @@ function SideNav($mdSidenav, $rootScope, $mdDialog, $mdMedia, $state, PostsServi
         if (!PostsService.allPosts) {
             return;
         }
-        const posts = PostsService.allPosts.filter(post => {
-            return (post.author === $rootScope.user._id);
+        PostsService.getMyPosts($rootScope.user._id)
+        .then(posts => {
+            if (posts.length === 0) {
+                $mdDialog.show(
+                    $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('You have not posted any memes :(')
+                        .textContent('Please post some dank memes and spread some laughter in this grim world :)')
+                        .ariaLabel('No Posts')
+                        .ok('Okay')
+                );
+            }
+            else {
+                ctrl.setFilter('myPosts');
+                $rootScope.posts = posts;
+            }
+            ctrl.close();
+        })
+        .catch(err => {
+            console.log(err);
         });
-        if (posts.length === 0) {
-            $mdDialog.show(
-                $mdDialog.alert()
-                    .clickOutsideToClose(true)
-                    .title('You have not posted any memes :(')
-                    .textContent('Please post some dank memes and spread some laughter in this grim world :)')
-                    .ariaLabel('No Posts')
-                    .ok('Okay')
-            );
-        }
-        else {
-            ctrl.setFilter('myPosts');
-            $rootScope.posts = posts;
-        }
-        ctrl.close();
     };
 
     ctrl.close = function() {

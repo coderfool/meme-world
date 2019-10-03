@@ -16,19 +16,19 @@
     <md-list>
         <md-list-item>
             <md-button 
-                ng-class="{'md-accent': $ctrl.selectedFilter === 'popular'}"
+                ng-class="{'md-accent': $root.selectedFilter === 'popular'}"
                 ng-click="$ctrl.setFilter('popular')">Popular
             </md-button>
         </md-list-item>
         <md-list-item>
             <md-button 
-                ng-class="{'md-accent': $ctrl.selectedFilter === 'new'}"
+                ng-class="{'md-accent': $root.selectedFilter === 'new'}"
                 ng-click="$ctrl.setFilter('new')">New
             </md-button>
         </md-list-item>
         <md-list-item ng-if="$root.loggedIn">
             <md-button 
-                ng-class="{'md-accent': $ctrl.selectedFilter === 'myPosts'}"
+                ng-class="{'md-accent': $root.selectedFilter === 'myPosts'}"
                 ng-click="$ctrl.showMyPosts()">My Posts
             </md-button>
         </md-list-item>

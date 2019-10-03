@@ -26,9 +26,9 @@ const upload = multer({
 });
 
 router.get('/index/:index', (req, res, next) => {
-    Posts.find()
+    Posts.find({})
     .then(allPosts => {
-        const index = req.params.index;
+        const index = parseInt(req.params.index);
         let posts = allPosts.slice(index, index + 5);
         let promises = [];
         for (let i = 0; i < posts.length; i++) {
@@ -363,6 +363,28 @@ router.route('/comments/:commentId/downvote')
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
             res.json(comment);
+        })
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+router.route('/by/:userId')
+.get(authenticate.isLoggedIn, (req, res, next) => {
+    Posts.find({author: req.params.userId})
+    .then(posts => {
+        let promises = [];
+        for (let i = 0; i < posts.length; i++) {
+            promises.push(Comments.find({postId: posts[i]._id}));
+        }
+        Promise.all(promises)
+        .then(comments => {
+            for (let i = 0; i < comments.length; i++) {
+                posts[i].set('commentCount', comments[i].length, Number, {strict: false});
+            }
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(posts);
         })
         .catch(err => next(err));
     })

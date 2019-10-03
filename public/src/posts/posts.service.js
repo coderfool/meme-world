@@ -29,25 +29,19 @@ function PostsService ($http, $q) {
     };
 
     service.getPost = function(postId) {
-        if (service.allPosts) {
-            const post = service.allPosts.filter(post => post._id === postId)[0];
-            return Promise.resolve(post);
-        }
-        else {
-            const cancel = $q.defer();
-            return $http({
-                method: 'GET',
-                url: `../posts/${postId}`,
-                timeout: cancel.promise,
-                cancel: cancel
-            })
-            .then(res => {
-                return res.data;
-            })
-            .catch(err => {
-                return Promise.reject(err);
-            });
-        }
+        const cancel = $q.defer();
+        return $http({
+            method: 'GET',
+            url: `../posts/${postId}`,
+            timeout: cancel.promise,
+            cancel: cancel
+        })
+        .then(res => {
+            return res.data;
+        })
+        .catch(err => {
+            return Promise.reject(err);
+        });
     };
 
     service.getComments = function(postId) {
@@ -95,4 +89,20 @@ function PostsService ($http, $q) {
             headers: {'Content-Type': undefined}
         });
     };
+
+    service.getMyPosts = function(userId) {
+        const cancel = $q.defer();
+        return  $http({
+            method: 'GET',
+            url: `../posts/by/${userId}`,
+            timeout: cancel.promise,
+            cancel: cancel
+        })
+        .then(res => {
+            return res.data;
+        })
+        .catch(err => {
+            return Promise.reject(err);
+        });
+    }
 }

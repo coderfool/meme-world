@@ -9,7 +9,7 @@ PostsController.$inject = ['PostsService', '$rootScope'];
 function PostsController(PostsService, $rootScope) {
     const ctrl = this;
     
-    $rootScope.posts = [];
+    $rootScope.posts = $rootScope.posts ? $rootScope.posts : [];
     ctrl.messages = {
         default: 'Something went wrong. Please check your internet connection and try again.'
     };
@@ -31,11 +31,11 @@ function PostsController(PostsService, $rootScope) {
         });
     };
 
-    if (PostsService.allPosts) {
+    if ($rootScope.selectedFilter !== 'myPosts' && PostsService.allPosts) {
         $rootScope.posts = PostsService.allPosts;
         ctrl.showLoadMore = true;
     }
-    else {
+    else if ($rootScope.selectedFilter !== 'myPosts') {
         ctrl.loadPosts(0);
     }
 

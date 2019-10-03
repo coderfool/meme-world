@@ -104,5 +104,14 @@ function PostsService ($http, $q) {
         .catch(err => {
             return Promise.reject(err);
         });
-    }
+    };
+    
+    service.removePost = function(postId) {
+        if (!service.allPosts) {
+            return;
+        }
+        
+        const index = service.allPosts.findIndex(post => post._id === postId);
+        service.allPosts.splice(index, 1);
+    };
 }

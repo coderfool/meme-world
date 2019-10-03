@@ -46,5 +46,6 @@ function PostsController(PostsService, $rootScope) {
                 break;
             }
         }
+        PostsService.removePost(postId);
     };
 }

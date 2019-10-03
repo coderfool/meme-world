@@ -33,6 +33,11 @@
     right: 5px;
 }
 
+.left {
+    position: absolute;
+    left: 10px;
+}
+
 .white-bg {
     background-color: #fff !important;
 }
@@ -155,10 +160,4 @@
 
 .border-bottom {
     border-bottom: 1px solid #fff;
-}
-
-.inline-block {
-    /* display: inline-flex !important; */
-    /* flex-flow: row wrap !important; */
-    flex-wrap: nowrap !important;
 }

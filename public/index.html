@@ -12,29 +12,29 @@
     </head>
     <body layout="column">
         <header>
-            <md-toolbar layout-xs="column" layout="row">
-                <div layout="row" layout-align="start center" flex>
-                    <md-button hide-gt-sm class="md-icon-button" ng-click="ctrl.toggleSidenav()">
+            <md-toolbar layout-xs="column" layout-sm="column" layout="row" layout-align="center center">
+                <div layout="row" layout-align="center center" class="relative" flex="100">
+                    <md-button hide-gt-sm class="md-icon-button left" ng-click="ctrl.toggleSidenav()">
                         <i class="material-icons font-28">menu</i>
                     </md-button>
-                    <div layout="row" layout-align="start center" flex="100" flex-gt-xs="55" flex-gt-sm="35" flex-gt-md="25">
-                        <span flex="20" flex-gt-xs="20" flex-gt-md="30">
+                    <div layout="row" layout-align="center center" layout-align-gt-sm="start center" flex="100" flex-gt-xs="55" flex-gt-sm="35" flex-gt-md="30">
+                        <span flex="20" flex-gt-md="30">
                             <img src="/assets/images/logo.png" class="img-responsive" alt="logo" layout-padding> 
                         </span>
                         <a href="/" class="no-decorate text-white">
                             <h1 layout-padding class="md-headline">Meme World</h1>
                         </a>
                     </div>
-                    <span layout-gt-sm flex></span>
+                    <span hide-xs hide-sm flex></span>
                 </div>
-                <div hide-gt-xs class="border-bottom"></div>
-                <div layout="row" layout-align="center center" flex-gt-xs="45" flex-gt-sm="35">
+                <div hide-gt-sm class="border-bottom full-width"></div>
+                <div layout="row" layout-align="center center" flex-gt-sm="35">
                     <md-button ui-sref="home" ui-sref-active="md-primary white-bg">Home</md-button>
                     <div ng-if="!loggedIn">
                         <md-button class="md-raised md-accent" ng-click="loginPrompt()">Log In</md-button>
                         <md-button class="md-raised" ng-click="signupPrompt()">Sign Up</md-button>
                     </div>
-                    <span ng-if="loggedIn" hide-gt-sm flex></span>
+
                     <div ng-if="loggedIn" layout="row" flex-gt-sm="65">
                         <md-menu md-position-mode="target-right bottom target" md-offset="-5 5">
                             <md-button layout="row" layout-align="start center" ng-click="ctrl.showUserMenu($mdMenu, $event)">

@@ -18,11 +18,13 @@ function ResetPasswordController($location, $http, $mdToast, $state) {
         if (!valid) {
             return;
         }
-
+        
         if (ctrl.password !== ctrl.confirmPassword) {
             ctrl.err = 'Passwords do not match';
             return;
         }
+        
+        ctrl.processing = true;
 
         $http.post($location.absUrl(), {
             password: ctrl.password
@@ -43,6 +45,7 @@ function ResetPasswordController($location, $http, $mdToast, $state) {
                 window.location.href = baseUrl;
             })
             .catch(angular.noop);
+            ctrl.processing = false;
         })
         .catch(err => {
             if (err.data && err.data.error) {
@@ -51,6 +54,7 @@ function ResetPasswordController($location, $http, $mdToast, $state) {
             else {
                 console.error(err);
             }
+            ctrl.processing = false;
         });
     };
 }

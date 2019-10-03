@@ -155,6 +155,7 @@ function LoginController($mdDialog, $http, $rootScope) {
     };
 
     ctrl.resetPassword = function(valid) {
+        ctrl.processing = true;
         ctrl.clearMessages();
         ctrl.passwordReset = false;
         if (!valid) {
@@ -165,6 +166,7 @@ function LoginController($mdDialog, $http, $rootScope) {
         })
         .then(res => {
             ctrl.passwordReset = true;
+            ctrl.processing = false;
         })
         .catch(err => {
             if (err.data && err.data.error && err.data.error.status === 404) {
@@ -178,6 +180,7 @@ function LoginController($mdDialog, $http, $rootScope) {
                 ctrl.err.default = true;
                 console.error(err);
             }
+            ctrl.processing = false;
         });
     }
 

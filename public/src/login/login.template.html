@@ -39,7 +39,7 @@
                 <span ng-message="default" md-colors="{color: 'red'}">{{ctrl.messages.default}}</span>
             </div>
             <span ng-if="ctrl.passwordReset" class="md-body-1 text-center" md-colors="{color: 'green'}">{{ctrl.messages.passwordReset}}</span>
-            <md-button type="submit" class="md-raised md-primary" ng-click="ctrl.resetPassword(forgotPassword.$valid)">Reset</md-button>
+            <md-button type="submit" class="md-raised md-primary" ng-click="ctrl.resetPassword(forgotPassword.$valid)" ng-disabled="ctrl.processing">Reset</md-button>
         </form>
         <span>Don't have an account?<md-button class="md-primary" ng-click="$root.signupPrompt();">Sign Up</md-button></span>
     </md-dialog-content>

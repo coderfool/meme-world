@@ -35,11 +35,11 @@
     </md-list>
     <md-card-actions layout="row" layout-align="center">
         <md-button layout="row" layout-align="center center" class="md-icon-button" aria-label="Upvote"
-            ng-class="{'md-accent': $ctrl.upvoted}" ng-click="$ctrl.upvote()">
+            ng-class="{'md-accent': $root.loggedIn && $ctrl.upvoted}" ng-click="$ctrl.upvote()">
             <i class="material-icons md-dark">arrow_upward</i>
         </md-button>
         <md-button layout="row" layout-align="center center" class="md-icon-button" aria-label="Downvote"
-            ng-class="{'md-accent': $ctrl.downvoted}" ng-click="$ctrl.downvote()">
+            ng-class="{'md-accent': $root.loggedIn && $ctrl.downvoted}" ng-click="$ctrl.downvote()">
             <i class="material-icons md-dark">arrow_downward</i>
         </md-button>
         <md-button layout="row" layout-align="center center"  class="md-icon-button" aria-label="Comment"
